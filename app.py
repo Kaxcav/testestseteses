@@ -299,6 +299,8 @@ def webhook_invictuspay():
     return jsonify({"ok": True}), 200
 
 
+# Inicializa o banco SEMPRE (funciona com gunicorn e desenvolvimento)
+init_db()
+
 if __name__ == "__main__":
-    init_db()
     app.run(debug=True, port=5000)
