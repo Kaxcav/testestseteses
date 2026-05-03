@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Visitantes – Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#f0f0f0;color:#1f2937}
+.nav{background:#1a2744;color:#fff;padding:0 2rem;height:52px;display:flex;align-items:center;justify-content:space-between;font-size:15px;font-weight:600}
+.nav a{color:#8a9bc0;font-size:13px;font-weight:400;text-decoration:none}
+.nav a:hover{color:#fff}
+.wrap{max-width:1200px;margin:2rem auto;padding:0 1.5rem}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:1.5rem}
+.stat{background:#fff;border-radius:10px;padding:1rem 1.25rem;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.stat-label{font-size:12px;color:#6b7280;margin-bottom:4px;font-weight:500}
+.stat-val{font-size:24px;font-weight:700;color:#1a2744}
+.card{background:#fff;border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,.08);overflow:hidden;margin-bottom:1.5rem}
+.card-title{padding:14px 18px;font-size:14px;font-weight:600;border-bottom:1px solid #e5e7eb;display:flex;justify-content:space-between;align-items:center}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{padding:10px 14px;text-align:left;font-weight:600;font-size:11px;color:#fff;background:#1a2744;text-transform:uppercase;letter-spacing:.5px}
+td{padding:10px 14px;border-bottom:1px solid #f0f0f0;color:#374151}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#f9fafb}
+.badge{display:inline-block;padding:2px 8px;border-radius:100px;font-size:11px;font-weight:600}
+.badge-pv{background:#dbeafe;color:#1d4ed8}
+.badge-cart{background:#dcfce7;color:#15803d}
+.badge-buy{background:#fef9c3;color:#92400e}
+.badge-link{background:#f3f4f6;color:#374151}
+.empty{padding:2rem;text-align:center;color:#9ca3af;font-size:14px}
+</style>
+</head>
+<body>
+<nav class="nav">
+  🛒 Admin – Visitantes
+  <div style="display:flex;gap:16px">
+    <a href="/admin/pedidos">Pedidos</a>
+    <a href="/">Site</a>
+  </div>
+</nav>
+
+<div class="wrap">
+  {% set total_v = visitantes|length %}
+  {% set novos = visitantes|selectattr('first_visit','eq',1)|list|length %}
+  {% set total_acoes = acoes|length %}
+
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Total de visitantes</div><div class="stat-val">{{ total_v }}</div></div>
+    <div class="stat"><div class="stat-label">Visitantes novos</div><div class="stat-val">{{ novos }}</div></div>
+    <div class="stat"><div class="stat-label">Ações registradas</div><div class="stat-val">{{ total_acoes }}</div></div>
+    <div class="stat"><div class="stat-label">Checkouts iniciados</div><div class="stat-val">{{ acoes|selectattr('action','eq','begin_checkout')|list|length }}</div></div>
+    <div class="stat"><div class="stat-label">Adições ao carrinho</div><div class="stat-val">{{ acoes|selectattr('action','eq','add_to_cart')|list|length }}</div></div>
+  </div>
+
+  <!-- VISITANTES -->
+  <div class="card">
+    <div class="card-title">Visitantes ({{ total_v }})</div>
+    {% if visitantes %}
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th><th>Visitas</th><th>Idioma</th><th>Resolução</th>
+          <th>Fuso</th><th>Origem</th><th>Última visita</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for v in visitantes %}
+        <tr>
+          <td style="font-family:monospace;font-size:11px;color:#6b7280">{{ v.id[-12:] }}</td>
+          <td><strong>{{ v.visit_count }}</strong></td>
+          <td>{{ v.language or '—' }}</td>
+          <td>{{ v.screen_resolution or '—' }}</td>
+          <td>{{ v.timezone or '—' }}</td>
+          <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
+            {{ v.referrer or 'direct' }}
+          </td>
+          <td>{{ v.last_visit }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty">Nenhum visitante ainda. As visitas aparecerão aqui quando chegarem.</div>
+    {% endif %}
+  </div>
+
+  <!-- AÇÕES -->
+  <div class="card">
+    <div class="card-title">Últimas ações ({{ total_acoes }})</div>
+    {% if acoes %}
+    <table>
+      <thead>
+        <tr><th>Ação</th><th>Página</th><th>Visitante</th><th>Data</th></tr>
+      </thead>
+      <tbody>
+        {% for a in acoes %}
+        <tr>
+          <td>
+            {% if a.action == 'page_view' %}<span class="badge badge-pv">visualização</span>
+            {% elif a.action == 'add_to_cart' %}<span class="badge badge-cart">carrinho</span>
+            {% elif a.action == 'begin_checkout' %}<span class="badge badge-buy">checkout</span>
+            {% else %}<span class="badge badge-link">{{ a.action }}</span>{% endif %}
+          </td>
+          <td>{{ a.page or '/' }}</td>
+          <td style="font-family:monospace;font-size:11px;color:#6b7280">{{ a.visitor_id[-12:] if a.visitor_id else '—' }}</td>
+          <td>{{ a.created_at }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty">Nenhuma ação registrada ainda.</div>
+    {% endif %}
+  </div>
+</div>
+</body>
+</html>
