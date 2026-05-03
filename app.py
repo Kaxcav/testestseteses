@@ -6,9 +6,7 @@ from database import (init_db, salvar_pedido, listar_pedidos, atualizar_status_p
     remover_do_carrinho, limpar_carrinho, total_itens_carrinho)
 import uuid, os, requests as req_lib
 
-import os as _os
-_tmpl = 'templates' if _os.path.isdir('templates') else '.'
-app = Flask(__name__, template_folder=_tmpl)
+app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "troque-esta-chave-em-producao")
 
 # ─── CONFIG ───────────────────────────────────────────────────────────────────
@@ -299,7 +297,90 @@ def webhook_invictuspay():
     return jsonify({"ok": True}), 200
 
 
-# Inicializa o banco SEMPRE (funciona com gunicorn e desenvolvimento)
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  RASTREAMENTO DE VISITANTES
+# ══════════════════════════════════════════════════════════════════════════════
+
+def init_visitor_tables():
+    import sqlite3 as _sq
+    db = os.environ.get("DB_PATH", "/data/pedidos.db")
+    os.makedirs(os.path.dirname(db), exist_ok=True)
+    conn = _sq.connect(db)
+    conn.execute("""CREATE TABLE IF NOT EXISTS visitantes (
+        id TEXT PRIMARY KEY, session_id TEXT, first_visit INTEGER,
+        visit_count INTEGER, user_agent TEXT, language TEXT, platform TEXT,
+        screen_resolution TEXT, timezone TEXT, referrer TEXT,
+        landing_page TEXT, created_at TEXT, last_visit TEXT)""")
+    conn.execute("""CREATE TABLE IF NOT EXISTS acoes_usuario (
+        id INTEGER PRIMARY KEY AUTOINCREMENT, visitor_id TEXT,
+        session_id TEXT, action TEXT, details TEXT, page TEXT, created_at TEXT)""")
+    conn.commit(); conn.close()
+
+init_visitor_tables()
+
+
+@app.route("/api/visitor-data", methods=["POST"])
+def api_visitor_data():
+    try:
+        d = request.get_json(silent=True) or {}
+        import sqlite3 as _sq
+        db = os.environ.get("DB_PATH", "/data/pedidos.db")
+        conn = _sq.connect(db); conn.row_factory = _sq.Row
+        now = __import__('datetime').datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        ex = conn.execute("SELECT id FROM visitantes WHERE id=?", (d.get("visitorId",""),)).fetchone()
+        if ex:
+            conn.execute("UPDATE visitantes SET session_id=?,visit_count=?,last_visit=? WHERE id=?",
+                (d.get("sessionId"), d.get("visitCount"), now, d.get("visitorId")))
+        else:
+            conn.execute("""INSERT INTO visitantes
+                (id,session_id,first_visit,visit_count,user_agent,language,platform,
+                 screen_resolution,timezone,referrer,landing_page,created_at,last_visit)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)""", (
+                d.get("visitorId",""), d.get("sessionId",""), int(d.get("firstVisit",0)),
+                d.get("visitCount",1), d.get("userAgent",""), d.get("language",""),
+                d.get("platform",""), d.get("screenResolution",""), d.get("timezone",""),
+                d.get("referrer",""), d.get("landingPage",""), now, now))
+        conn.commit(); conn.close()
+        return jsonify({"ok": True})
+    except Exception as e:
+        return jsonify({"ok": False}), 500
+
+
+@app.route("/api/user-action", methods=["POST"])
+def api_user_action():
+    try:
+        d = request.get_json(silent=True) or {}
+        import sqlite3 as _sq
+        db = os.environ.get("DB_PATH", "/data/pedidos.db")
+        conn = _sq.connect(db)
+        now = __import__('datetime').datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        conn.execute("""INSERT INTO acoes_usuario
+            (visitor_id,session_id,action,details,page,created_at)
+            VALUES (?,?,?,?,?,?)""", (
+            d.get("visitorId",""), d.get("sessionId",""),
+            d.get("action",""), str(d.get("details",{})),
+            d.get("page",""), now))
+        conn.commit(); conn.close()
+        return jsonify({"ok": True})
+    except Exception:
+        return jsonify({"ok": False}), 500
+
+
+@app.route("/admin/visitantes")
+def admin_visitantes():
+    import sqlite3 as _sq
+    db = os.environ.get("DB_PATH", "/data/pedidos.db")
+    conn = _sq.connect(db); conn.row_factory = _sq.Row
+    visitantes = [dict(r) for r in conn.execute(
+        "SELECT * FROM visitantes ORDER BY last_visit DESC").fetchall()]
+    acoes = [dict(r) for r in conn.execute(
+        "SELECT * FROM acoes_usuario ORDER BY created_at DESC LIMIT 100").fetchall()]
+    conn.close()
+    return render_template("admin_visitantes.html", visitantes=visitantes, acoes=acoes)
+
+# Inicializa o banco sempre — funciona com gunicorn e em desenvolvimento
 init_db()
 
 if __name__ == "__main__":
