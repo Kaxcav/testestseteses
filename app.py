@@ -121,13 +121,15 @@ def checkout():
         limpar_carrinho(u["id"])
 
     from urllib.parse import urlencode, quote_plus
+    import re as _re
+    def _clean(s): return _re.sub(r'[\r\n\t]', ' ', str(s)).strip()
     params = urlencode({
-        "name":     nome,
-        "email":    email,
-        "phone":    telefone,
-        "cpf":      cpf,
-        "order_id": pedido_id,
-        "ref":      pedido_id,
+        "name":     _clean(nome),
+        "email":    _clean(email),
+        "phone":    _clean(telefone),
+        "cpf":      _clean(cpf),
+        "order_id": _clean(pedido_id),
+        "ref":      _clean(pedido_id),
         "quantity": quantidade,
     }, quote_via=quote_plus)
     return redirect(f"{INVICTUS_CHECKOUT_URL}?{params}")
