@@ -120,21 +120,8 @@ def checkout():
     if u:
         limpar_carrinho(u["id"])
 
-    from urllib.parse import urlencode, quote_plus
-    import re as _re
-    def _clean(s): return _re.sub(r'[\r\n\t]', ' ', str(s)).strip()
-    import re as _re
-    def _clean(s): return _re.sub(r'[\r\n\t]', ' ', str(s)).strip()
-    params = urlencode({
-        "name":     _clean(nome),
-        "email":    _clean(email),
-        "phone":    _clean(telefone),
-        "cpf":      _clean(cpf),
-        "order_id": _clean(pedido_id),
-        "ref":      _clean(pedido_id),
-        "quantity": quantidade,
-    }, quote_via=quote_plus)
-    return redirect(f"{INVICTUS_CHECKOUT_URL}?{params}")
+    # Redireciona direto sem passar dados na URL (evita erro de newline)
+    return redirect(INVICTUS_CHECKOUT_URL)
 
 
 @app.route("/obrigado")
