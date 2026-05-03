@@ -3,7 +3,7 @@ import hashlib
 import os
 from datetime import datetime
 
-DB_PATH = "pedidos.db"
+DB_PATH = "/data/pedidos.db"
 
 def get_conn():
     conn = sqlite3.connect(DB_PATH)
