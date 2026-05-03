@@ -50,6 +50,25 @@ def login_obrigatorio(f):
     return wrapper
 
 
+
+def admin_obrigatorio(f):
+    """Protege rotas admin com usuário e senha via HTTP Basic Auth."""
+    from functools import wraps
+    from flask import Response
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        ADMIN_USER = os.environ.get("ADMIN_USER", "admin")
+        ADMIN_PASS = os.environ.get("ADMIN_PASS", "troque123")
+        auth = request.authorization
+        if not auth or auth.username != ADMIN_USER or auth.password != ADMIN_PASS:
+            return Response(
+                "Acesso restrito. Digite usuário e senha de administrador.",
+                401,
+                {"WWW-Authenticate": 'Basic realm="Admin Mercado de Ofertas"'}
+            )
+        return f(*args, **kwargs)
+    return wrapper
+
 # ══════════════════════════════════════════════════════════════════════════════
 #  PÁGINAS
 # ══════════════════════════════════════════════════════════════════════════════
@@ -120,6 +139,7 @@ def obrigado():
 
 
 @app.route("/admin/pedidos")
+@admin_obrigatorio
 def admin_pedidos():
     return render_template("admin.html", pedidos=listar_pedidos())
 
@@ -369,6 +389,7 @@ def api_user_action():
 
 
 @app.route("/admin/visitantes")
+@admin_obrigatorio
 def admin_visitantes():
     import sqlite3 as _sq
     db = os.environ.get("DB_PATH", "/data/pedidos.db")
