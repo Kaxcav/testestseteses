@@ -123,6 +123,8 @@ def checkout():
     from urllib.parse import urlencode, quote_plus
     import re as _re
     def _clean(s): return _re.sub(r'[\r\n\t]', ' ', str(s)).strip()
+    import re as _re
+    def _clean(s): return _re.sub(r'[\r\n\t]', ' ', str(s)).strip()
     params = urlencode({
         "name":     _clean(nome),
         "email":    _clean(email),
