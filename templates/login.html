@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Entrar – Mercado Liquida</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--navy:#1a2744;--navy2:#243a7a;--green:#16a34a;--red:#dc2626;--gray1:#f8f9fa;--gray2:#f0f0f0;--gray3:#e5e7eb;--gray4:#d1d5db;--gray5:#9ca3af;--gray6:#6b7280;--gray7:#374151;--gray8:#1f2937;--radius:8px;--radius-lg:14px;--shadow-lg:0 20px 60px rgba(0,0,0,.12),0 4px 12px rgba(0,0,0,.06)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--gray2);color:var(--gray8);min-height:100vh;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit;cursor:pointer}
+
+/* NAV */
+.nav{background:var(--navy);height:56px;display:flex;align-items:center;padding:0 1.5rem;gap:12px}
+.nav-logo{display:flex;align-items:center;gap:9px;color:#fff;font-size:17px;font-weight:700;cursor:pointer}
+.nav-logo-box{width:28px;height:28px;background:#fff;border-radius:6px;display:flex;align-items:center;justify-content:center}
+
+/* LAYOUT */
+.page{flex:1;display:flex;align-items:center;justify-content:center;padding:2rem 1rem}
+.card{background:#fff;border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);width:100%;max-width:420px;overflow:hidden}
+
+/* TABS */
+.tabs{display:flex;border-bottom:2px solid var(--gray3)}
+.tab{flex:1;padding:16px;text-align:center;font-size:14px;font-weight:500;color:var(--gray5);cursor:pointer;transition:color .15s;border-bottom:2px solid transparent;margin-bottom:-2px;user-select:none}
+.tab.active{color:var(--navy);border-bottom-color:var(--navy)}
+.tab:hover:not(.active){color:var(--gray7)}
+
+/* FORM */
+.form-body{padding:1.75rem}
+.form-title{font-size:20px;font-weight:700;color:var(--gray8);margin-bottom:4px}
+.form-sub{font-size:13px;color:var(--gray5);margin-bottom:1.5rem}
+
+/* GOOGLE BTN */
+.btn-google{width:100%;height:44px;border:1.5px solid var(--gray3);border-radius:var(--radius);background:#fff;display:flex;align-items:center;justify-content:center;gap:10px;font-size:14px;font-weight:500;color:var(--gray7);cursor:pointer;transition:border-color .15s,background .15s,box-shadow .15s;margin-bottom:1.25rem}
+.btn-google:hover{border-color:var(--gray4);background:var(--gray1);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.btn-google:active{transform:scale(.99)}
+.google-icon{width:18px;height:18px;flex-shrink:0}
+
+/* DIVIDER */
+.divider{display:flex;align-items:center;gap:10px;margin-bottom:1.25rem}
+.divider-line{flex:1;height:1px;background:var(--gray3)}
+.divider-text{font-size:12px;color:var(--gray5);white-space:nowrap}
+
+/* FIELDS */
+.field{margin-bottom:14px}
+label{display:block;font-size:12px;font-weight:600;color:var(--gray7);margin-bottom:5px;letter-spacing:.2px}
+input[type=email],input[type=password],input[type=text]{width:100%;height:42px;border:1.5px solid var(--gray3);border-radius:var(--radius);padding:0 12px;font-size:14px;font-family:'Inter',sans-serif;color:var(--gray8);outline:none;transition:border-color .15s,box-shadow .15s;background:#fff}
+input:focus{border-color:var(--navy);box-shadow:0 0 0 3px rgba(26,39,116,.08)}
+input.error{border-color:var(--red)}
+input::placeholder{color:var(--gray4)}
+.pwd-wrap{position:relative}
+.pwd-wrap input{padding-right:42px}
+.pwd-toggle{position:absolute;right:0;top:0;width:42px;height:42px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--gray5);border:none;background:none;transition:color .15s}
+.pwd-toggle:hover{color:var(--gray7)}
+.field-error{font-size:11px;color:var(--red);margin-top:4px;display:none}
+
+/* FORGOT */
+.forgot-row{display:flex;justify-content:flex-end;margin-bottom:14px;margin-top:-8px}
+.forgot-link{font-size:12px;color:var(--navy);transition:color .15s}
+.forgot-link:hover{color:var(--navy2);text-decoration:underline}
+
+/* SUBMIT */
+.btn-submit{width:100%;height:46px;background:var(--navy);color:#fff;border:none;border-radius:var(--radius);font-size:15px;font-weight:600;cursor:pointer;transition:background .15s,transform .1s;font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-submit:hover{background:var(--navy2)}
+.btn-submit:active{transform:scale(.98)}
+.btn-submit:disabled{opacity:.6;cursor:not-allowed}
+
+/* TERMS */
+.terms{font-size:11px;color:var(--gray5);text-align:center;margin-top:14px;line-height:1.5}
+.terms a{color:var(--navy);transition:color .15s}
+.terms a:hover{color:var(--navy2);text-decoration:underline}
+
+/* SERVER ERROR */
+.server-error{background:#fef2f2;border:1px solid #fecaca;color:var(--red);padding:10px 13px;border-radius:var(--radius);font-size:13px;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.server-success{background:#f0fdf4;border:1px solid #bbf7d0;color:var(--green);padding:10px 13px;border-radius:var(--radius);font-size:13px;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+
+/* FOOTER LINKS */
+.alt-action{text-align:center;font-size:13px;color:var(--gray6);margin-top:16px}
+.alt-action a{color:var(--navy);font-weight:500;transition:color .15s}
+.alt-action a:hover{color:var(--navy2);text-decoration:underline}
+
+/* LOADING SPINNER */
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:none}
+
+/* PANEL TOGGLE */
+.panel{display:none}
+.panel.active{display:block}
+
+footer{background:var(--navy);color:#6b7a9c;text-align:center;padding:1rem;font-size:12px}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-logo" href="/">
+    <div class="nav-logo-box">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1a2744" stroke-width="2.5">
+        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <path d="M16 10a4 4 0 01-8 0"/>
+      </svg>
+    </div>
+    Mercado Liquida
+  </a>
+</nav>
+
+<div class="page">
+  <div class="card">
+    <div class="tabs">
+      <div class="tab active" id="tab-login" onclick="switchTab('login')">Entrar</div>
+      <div class="tab" id="tab-register" onclick="switchTab('register')">Criar conta</div>
+    </div>
+
+    <!-- ── LOGIN PANEL ── -->
+    <div class="panel active" id="panel-login">
+      <div class="form-body">
+        <div class="form-title">Bem-vindo de volta!</div>
+        <div class="form-sub">Acesse sua conta para continuar comprando</div>
+
+        {% if error %}<div class="server-error">⚠️ {{ error }}</div>{% endif %}
+        {% if success %}<div class="server-success">✓ {{ success }}</div>{% endif %}
+
+        <!-- Google -->
+        <button class="btn-google" onclick="loginGoogle()">
+          <svg class="google-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Continuar com Google
+        </button>
+
+        <div class="divider"><div class="divider-line"></div><span class="divider-text">ou use seu e-mail</span><div class="divider-line"></div></div>
+
+        <form id="form-login" onsubmit="submitLogin(event)">
+          <div class="field">
+            <label>E-mail</label>
+            <input type="email" id="login-email" name="email" placeholder="seu@email.com" autocomplete="email" required/>
+            <div class="field-error" id="err-login-email">E-mail inválido</div>
+          </div>
+          <div class="field">
+            <label>Senha</label>
+            <div class="pwd-wrap">
+              <input type="password" id="login-pwd" name="senha" placeholder="••••••••" autocomplete="current-password" required/>
+              <button type="button" class="pwd-toggle" onclick="togglePwd('login-pwd',this)" title="Mostrar senha">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <div class="field-error" id="err-login-pwd">Senha obrigatória</div>
+          </div>
+          <div class="forgot-row">
+            <a class="forgot-link" onclick="showForgot()">Esqueceu a senha?</a>
+          </div>
+          <button type="submit" class="btn-submit" id="btn-login">
+            <div class="spinner" id="spin-login"></div>
+            <span id="btn-login-text">Entrar na minha conta</span>
+          </button>
+        </form>
+
+        <div class="terms">
+          Ao entrar, você concorda com os <a href="#">Termos de Uso</a> e a <a href="#">Política de Privacidade</a>
+        </div>
+        <div class="alt-action">Não tem conta? <a onclick="switchTab('register')">Criar conta grátis</a></div>
+      </div>
+    </div>
+
+    <!-- ── REGISTER PANEL ── -->
+    <div class="panel" id="panel-register">
+      <div class="form-body">
+        <div class="form-title">Criar sua conta</div>
+        <div class="form-sub">É rápido, gratuito e você começa a comprar agora mesmo</div>
+
+        <button class="btn-google" onclick="loginGoogle()">
+          <svg class="google-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84z"/></svg>
+          Cadastrar com Google
+        </button>
+
+        <div class="divider"><div class="divider-line"></div><span class="divider-text">ou crie com e-mail</span><div class="divider-line"></div></div>
+
+        <form id="form-register" onsubmit="submitRegister(event)">
+          <div class="field">
+            <label>Nome completo</label>
+            <input type="text" id="reg-nome" placeholder="João da Silva" autocomplete="name" required/>
+            <div class="field-error" id="err-reg-nome">Nome obrigatório</div>
+          </div>
+          <div class="field">
+            <label>E-mail</label>
+            <input type="email" id="reg-email" placeholder="seu@email.com" autocomplete="email" required/>
+            <div class="field-error" id="err-reg-email">E-mail inválido</div>
+          </div>
+          <div class="field">
+            <label>Senha</label>
+            <div class="pwd-wrap">
+              <input type="password" id="reg-pwd" placeholder="Mínimo 6 caracteres" autocomplete="new-password" required/>
+              <button type="button" class="pwd-toggle" onclick="togglePwd('reg-pwd',this)" title="Mostrar senha">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <div class="field-error" id="err-reg-pwd">Mínimo 6 caracteres</div>
+          </div>
+          <div class="field">
+            <label>Confirmar senha</label>
+            <div class="pwd-wrap">
+              <input type="password" id="reg-pwd2" placeholder="Repita a senha" autocomplete="new-password" required/>
+              <button type="button" class="pwd-toggle" onclick="togglePwd('reg-pwd2',this)" title="Mostrar senha">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <div class="field-error" id="err-reg-pwd2">As senhas não coincidem</div>
+          </div>
+          <button type="submit" class="btn-submit" id="btn-register">
+            <div class="spinner" id="spin-register"></div>
+            <span id="btn-register-text">Criar minha conta</span>
+          </button>
+        </form>
+
+        <div class="terms">
+          Ao criar conta, você concorda com os <a href="#">Termos de Uso</a> e a <a href="#">Política de Privacidade</a>
+        </div>
+        <div class="alt-action">Já tem conta? <a onclick="switchTab('login')">Entrar</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>© 2025 Mercado Liquida – Todos os direitos reservados</footer>
+
+<script>
+function switchTab(tab) {
+  document.getElementById('panel-login').classList.toggle('active', tab==='login');
+  document.getElementById('panel-register').classList.toggle('active', tab==='register');
+  document.getElementById('tab-login').classList.toggle('active', tab==='login');
+  document.getElementById('tab-register').classList.toggle('active', tab==='register');
+}
+
+function togglePwd(id, btn) {
+  const inp = document.getElementById(id);
+  const show = inp.type === 'password';
+  inp.type = show ? 'text' : 'password';
+  btn.innerHTML = show
+    ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`
+    : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+}
+
+function setLoading(btnId, spinId, textId, loading, text='') {
+  const btn = document.getElementById(btnId);
+  const spin = document.getElementById(spinId);
+  const txt = document.getElementById(textId);
+  btn.disabled = loading;
+  spin.style.display = loading ? 'block' : 'none';
+  if(text) txt.textContent = text;
+}
+
+async function submitLogin(e) {
+  e.preventDefault();
+  const email = document.getElementById('login-email').value.trim();
+  const pwd   = document.getElementById('login-pwd').value;
+  if(!email || !pwd) return;
+  setLoading('btn-login','spin-login','btn-login-text', true, 'Entrando...');
+  try {
+    const r = await fetch('/auth/login', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({email, senha: pwd})
+    });
+    const d = await r.json();
+    if(d.ok) { window.location.href = d.redirect || '/'; }
+    else { showError(d.error || 'E-mail ou senha incorretos'); }
+  } catch(_) { showError('Erro de conexão. Tente novamente.'); }
+  setLoading('btn-login','spin-login','btn-login-text', false, 'Entrar na minha conta');
+}
+
+async function submitRegister(e) {
+  e.preventDefault();
+  const nome  = document.getElementById('reg-nome').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const pwd   = document.getElementById('reg-pwd').value;
+  const pwd2  = document.getElementById('reg-pwd2').value;
+  if(pwd.length < 6) { showFieldErr('err-reg-pwd'); return; }
+  if(pwd !== pwd2)   { showFieldErr('err-reg-pwd2'); return; }
+  setLoading('btn-register','spin-register','btn-register-text', true, 'Criando conta...');
+  try {
+    const r = await fetch('/auth/register', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({nome, email, senha: pwd})
+    });
+    const d = await r.json();
+    if(d.ok) { window.location.href = d.redirect || '/'; }
+    else { showError(d.error || 'Erro ao criar conta.'); }
+  } catch(_) { showError('Erro de conexão. Tente novamente.'); }
+  setLoading('btn-register','spin-register','btn-register-text', false, 'Criar minha conta');
+}
+
+function loginGoogle() {
+  // Redireciona para a rota de OAuth do Google no backend
+  window.location.href = '/auth/google';
+}
+
+function showForgot() {
+  const email = document.getElementById('login-email').value.trim();
+  const msg = email
+    ? `Link de recuperação enviado para ${email}!`
+    : 'Digite seu e-mail e clique novamente em "Esqueceu a senha?"';
+  alert(msg);
+}
+
+function showError(msg) {
+  // Remove erros antigos
+  document.querySelectorAll('.server-error').forEach(e=>e.remove());
+  const div = document.createElement('div');
+  div.className = 'server-error';
+  div.textContent = '⚠️ ' + msg;
+  const activePanel = document.querySelector('.panel.active .form-body');
+  activePanel.insertBefore(div, activePanel.querySelector('form'));
+  setTimeout(()=>div.remove(), 5000);
+}
+
+function showFieldErr(id) {
+  const el = document.getElementById(id);
+  el.style.display = 'block';
+  setTimeout(()=>el.style.display='none', 3000);
+}
+
+// Auto-switch tab via URL hash
+if(location.hash === '#register') switchTab('register');
+</script>
+</body>
+</html>

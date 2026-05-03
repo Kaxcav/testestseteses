@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Admin – Pedidos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Lexend',sans-serif;background:#f0f0f0;color:#1a1a1a}
+    .nav{background:#1a2744;color:#fff;padding:0 2rem;height:52px;display:flex;align-items:center;gap:10px;font-size:15px;font-weight:600}
+    .wrap{max-width:1100px;margin:2rem auto;padding:0 1.5rem}
+    .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:1.5rem}
+    .stat{background:#fff;border-radius:8px;padding:1rem 1.2rem}
+    .stat-label{font-size:12px;color:#888;margin-bottom:4px}
+    .stat-val{font-size:22px;font-weight:600;color:#1a2744}
+
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;font-size:13px}
+    thead{background:#1a2744;color:#fff}
+    th{padding:12px 14px;text-align:left;font-weight:500;font-size:12px;text-transform:uppercase;letter-spacing:0.5px}
+    td{padding:11px 14px;border-bottom:1px solid #f0f0f0;color:#444}
+    tr:last-child td{border-bottom:none}
+    tr:hover td{background:#fafafa}
+
+    .status{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
+    .status-pago{background:#dcfce7;color:#166534}
+    .status-aguardando{background:#fef9c3;color:#854d0e}
+    .status-recusado{background:#fee2e2;color:#991b1b}
+    .status-reembolsado{background:#e0e7ff;color:#3730a3}
+    .status-cancelado{background:#f3f4f6;color:#6b7280}
+
+    .empty{text-align:center;padding:3rem;color:#aaa;font-size:14px}
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  🛒 Admin – Painel de Pedidos
+  <span style="margin-left:auto;font-size:12px;font-weight:400;color:#8a9bc0">Mercado Liquida</span>
+</nav>
+
+<div class="wrap">
+  {% set total_pedidos = pedidos|length %}
+  {% set total_faturado = pedidos|selectattr('status','eq','pago')|sum(attribute='total') %}
+  {% set pedidos_pagos = pedidos|selectattr('status','eq','pago')|list|length %}
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-label">Total de pedidos</div>
+      <div class="stat-val">{{ total_pedidos }}</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Pedidos pagos</div>
+      <div class="stat-val">{{ pedidos_pagos }}</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Faturamento confirmado</div>
+      <div class="stat-val">R$ {{ "%.2f"|format(total_faturado) }}</div>
+    </div>
+  </div>
+
+  {% if pedidos %}
+  <table>
+    <thead>
+      <tr>
+        <th>#ID</th>
+        <th>Nome</th>
+        <th>E-mail</th>
+        <th>Telefone</th>
+        <th>Qtd</th>
+        <th>Total</th>
+        <th>Status</th>
+        <th>Data</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in pedidos %}
+      <tr>
+        <td><strong>{{ p.id }}</strong></td>
+        <td>{{ p.nome }}</td>
+        <td>{{ p.email }}</td>
+        <td>{{ p.telefone or '—' }}</td>
+        <td>{{ p.quantidade }}</td>
+        <td><strong>R$ {{ "%.2f"|format(p.total) }}</strong></td>
+        <td>
+          {% if p.status == 'pago' %}
+            <span class="status status-pago">✓ Pago</span>
+          {% elif p.status == 'aguardando_pagamento' %}
+            <span class="status status-aguardando">⏳ Aguardando</span>
+          {% elif p.status == 'recusado' %}
+            <span class="status status-recusado">✕ Recusado</span>
+          {% elif p.status == 'reembolsado' %}
+            <span class="status status-reembolsado">↩ Reembolsado</span>
+          {% else %}
+            <span class="status status-cancelado">{{ p.status }}</span>
+          {% endif %}
+        </td>
+        <td>{{ p.criado_em }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty">Nenhum pedido ainda. As vendas aparecerão aqui.</div>
+  {% endif %}
+</div>
+
+</body>
+</html>
