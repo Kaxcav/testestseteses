@@ -4,6 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Entrar – Mercado de Ofertas</title>
+<link rel="icon" type="image/png" href="/static/logo.png"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
 :root{--navy:#1a2744;--navy2:#243a7a;--rose:#c0586a;--rose2:#8b1a3a;--green:#16a34a;--red:#dc2626;--gray1:#f8f9fa;--gray2:#f0f0f0;--gray3:#e5e7eb;--gray4:#d1d5db;--gray5:#9ca3af;--gray6:#6b7280;--gray7:#374151;--gray8:#1f2937;--radius:8px;--radius-lg:14px;--shadow-lg:0 20px 60px rgba(0,0,0,.12),0 4px 12px rgba(0,0,0,.06)}
@@ -13,8 +14,10 @@ a{text-decoration:none;color:inherit;cursor:pointer}
 
 /* NAV */
 .nav{background:#fff;height:62px;display:flex;align-items:center;padding:0 1.5rem;gap:12px;box-shadow:0 1px 0 var(--gray3),0 8px 24px rgba(0,0,0,.05)}
-.nav-logo{display:flex;align-items:center;gap:10px;color:var(--gray8);font-size:17px;font-weight:800;cursor:pointer;letter-spacing:-.2px}
-.nav-logo-box{width:32px;height:32px;background:linear-gradient(135deg,var(--rose),var(--rose2));border-radius:8px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(192,88,106,.35)}
+.nav-logo{display:flex;align-items:center;gap:10px;color:var(--gray8);font-size:17px;font-weight:800;cursor:pointer;letter-spacing:-.2px;transition:transform .25s}
+.nav-logo:hover{transform:scale(1.03)}
+.nav-logo img{height:42px;width:auto;display:block;object-fit:contain}
+@media(max-width:480px){.nav-logo img{height:36px}}
 
 /* LAYOUT */
 .page{flex:1;display:flex;align-items:center;justify-content:center;padding:2rem 1rem}
@@ -94,15 +97,8 @@ footer{background:#fff;color:#6b7a9c;text-align:center;padding:1rem;font-size:12
 <body>
 
 <nav class="nav">
-  <a class="nav-logo" href="/">
-    <div class="nav-logo-box">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5">
-        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
-        <line x1="3" y1="6" x2="21" y2="6"/>
-        <path d="M16 10a4 4 0 01-8 0"/>
-      </svg>
-    </div>
-    Mercado de Ofertas
+  <a class="nav-logo" href="/" aria-label="Mercado de Ofertas - Início">
+    <img src="/static/logo.png" alt="Mercado de Ofertas"/>
   </a>
 </nav>
 
