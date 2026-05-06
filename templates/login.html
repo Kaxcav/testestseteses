@@ -6,15 +6,15 @@
 <title>Entrar – Mercado de Ofertas</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
-:root{--navy:#1a2744;--navy2:#243a7a;--green:#16a34a;--red:#dc2626;--gray1:#f8f9fa;--gray2:#f0f0f0;--gray3:#e5e7eb;--gray4:#d1d5db;--gray5:#9ca3af;--gray6:#6b7280;--gray7:#374151;--gray8:#1f2937;--radius:8px;--radius-lg:14px;--shadow-lg:0 20px 60px rgba(0,0,0,.12),0 4px 12px rgba(0,0,0,.06)}
+:root{--navy:#1a2744;--navy2:#243a7a;--rose:#c0586a;--rose2:#8b1a3a;--green:#16a34a;--red:#dc2626;--gray1:#f8f9fa;--gray2:#f0f0f0;--gray3:#e5e7eb;--gray4:#d1d5db;--gray5:#9ca3af;--gray6:#6b7280;--gray7:#374151;--gray8:#1f2937;--radius:8px;--radius-lg:14px;--shadow-lg:0 20px 60px rgba(0,0,0,.12),0 4px 12px rgba(0,0,0,.06)}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:var(--gray2);color:var(--gray8);min-height:100vh;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased}
 a{text-decoration:none;color:inherit;cursor:pointer}
 
 /* NAV */
-.nav{background:#fff;height:56px;display:flex;align-items:center;padding:0 1.5rem;gap:12px}
-.nav-logo{display:flex;align-items:center;gap:9px;color:#fff;font-size:17px;font-weight:700;cursor:pointer}
-.nav-logo-box{width:28px;height:28px;background:#fff;border-radius:6px;display:flex;align-items:center;justify-content:center}
+.nav{background:#fff;height:62px;display:flex;align-items:center;padding:0 1.5rem;gap:12px;box-shadow:0 1px 0 var(--gray3),0 8px 24px rgba(0,0,0,.05)}
+.nav-logo{display:flex;align-items:center;gap:10px;color:var(--gray8);font-size:17px;font-weight:800;cursor:pointer;letter-spacing:-.2px}
+.nav-logo-box{width:32px;height:32px;background:linear-gradient(135deg,var(--rose),var(--rose2));border-radius:8px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(192,88,106,.35)}
 
 /* LAYOUT */
 .page{flex:1;display:flex;align-items:center;justify-content:center;padding:2rem 1rem}
@@ -23,7 +23,7 @@ a{text-decoration:none;color:inherit;cursor:pointer}
 /* TABS */
 .tabs{display:flex;border-bottom:2px solid var(--gray3)}
 .tab{flex:1;padding:16px;text-align:center;font-size:14px;font-weight:500;color:var(--gray5);cursor:pointer;transition:color .15s;border-bottom:2px solid transparent;margin-bottom:-2px;user-select:none}
-.tab.active{color:var(--navy);border-bottom-color:var(--navy)}
+.tab.active{color:var(--rose2);border-bottom-color:var(--rose)}
 .tab:hover:not(.active){color:var(--gray7)}
 
 /* FORM */
@@ -46,7 +46,7 @@ a{text-decoration:none;color:inherit;cursor:pointer}
 .field{margin-bottom:14px}
 label{display:block;font-size:12px;font-weight:600;color:var(--gray7);margin-bottom:5px;letter-spacing:.2px}
 input[type=email],input[type=password],input[type=text]{width:100%;height:42px;border:1.5px solid var(--gray3);border-radius:var(--radius);padding:0 12px;font-size:14px;font-family:'Inter',sans-serif;color:var(--gray8);outline:none;transition:border-color .15s,box-shadow .15s;background:#fff}
-input:focus{border-color:var(--navy);box-shadow:0 0 0 3px rgba(26,39,116,.08)}
+input:focus{border-color:var(--rose);box-shadow:0 0 0 3px rgba(192,88,106,.1)}
 input.error{border-color:var(--red)}
 input::placeholder{color:var(--gray4)}
 .pwd-wrap{position:relative}
@@ -61,8 +61,8 @@ input::placeholder{color:var(--gray4)}
 .forgot-link:hover{color:var(--navy2);text-decoration:underline}
 
 /* SUBMIT */
-.btn-submit{width:100%;height:46px;background:#fff;color:#fff;border:none;border-radius:var(--radius);font-size:15px;font-weight:600;cursor:pointer;transition:background .15s,transform .1s;font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px}
-.btn-submit:hover{background:var(--navy2)}
+.btn-submit{width:100%;height:46px;background:linear-gradient(135deg,var(--rose),var(--rose2));color:#fff;border:none;border-radius:var(--radius);font-size:15px;font-weight:700;cursor:pointer;transition:opacity .15s,transform .1s;font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 20px rgba(192,88,106,.28)}
+.btn-submit:hover{opacity:.94}
 .btn-submit:active{transform:scale(.98)}
 .btn-submit:disabled{opacity:.6;cursor:not-allowed}
 
@@ -117,7 +117,7 @@ footer{background:#fff;color:#6b7a9c;text-align:center;padding:1rem;font-size:12
     <div class="panel active" id="panel-login">
       <div class="form-body">
         <div class="form-title">Bem-vindo de volta!</div>
-        <div class="form-sub">Acesse sua conta para continuar comprando</div>
+        <div class="form-sub">Entre para acompanhar o carrinho e concluir sua compra com mais rapidez</div>
 
         {% if error %}<div class="server-error">⚠️ {{ error }}</div>{% endif %}
         {% if success %}<div class="server-success">✓ {{ success }}</div>{% endif %}
@@ -166,7 +166,7 @@ footer{background:#fff;color:#6b7a9c;text-align:center;padding:1rem;font-size:12
     <div class="panel" id="panel-register">
       <div class="form-body">
         <div class="form-title">Criar sua conta</div>
-        <div class="form-sub">É rápido, gratuito e você começa a comprar agora mesmo</div>
+        <div class="form-sub">Crie sua conta para salvar seu carrinho e finalizar a compra mais rápido</div>
 
         <button class="btn-google" onclick="loginGoogle()">
           <svg class="google-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84z"/></svg>
@@ -221,7 +221,7 @@ footer{background:#fff;color:#6b7a9c;text-align:center;padding:1rem;font-size:12
   </div>
 </div>
 
-<footer>© 2025 Mercado de Ofertas – Todos os direitos reservados</footer>
+<footer>© 2026 Mercado de Ofertas – Compra segura, frete grátis e atendimento online</footer>
 
 <script>
 function switchTab(tab) {

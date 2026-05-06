@@ -7,28 +7,48 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
 :root{
-  --rose:#c0586a;--rose2:#8b1a3a;--rose-light:#fdf0f2;--rose-border:#f0c4cc;
+  --rose:#c0586a;--rose2:#8b1a3a;--rose-light:#fdf0f2;--rose-border:#f3c7cf;
   --gold:#b8860b;--gold-light:#fffbeb;
   --navy:#1a2744;--navy2:#243a7a;
   --green:#16a34a;--green-light:#dcfce7;--green-text:#15803d;
+  --yellow:#f59e0b;--orange:#ea580c;
+  --red:#dc2626;--red-light:#fee2e2;
   --gray1:#f8f9fa;--gray2:#f0f0f0;--gray3:#e5e7eb;--gray4:#d1d5db;
   --gray5:#9ca3af;--gray6:#6b7280;--gray7:#374151;--gray8:#1f2937;
-  --radius:10px;--radius-lg:14px;
-  --shadow:0 4px 16px rgba(0,0,0,.08);
-  --shadow-md:0 8px 32px rgba(0,0,0,.10);
-  --shadow-rose:0 4px 20px rgba(192,88,106,.3);
+  --radius:10px;--radius-lg:14px;--radius-xl:18px;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.08);
+  --shadow:0 8px 24px rgba(0,0,0,.07),0 2px 6px rgba(0,0,0,.04);
+  --shadow-rose:0 8px 24px rgba(192,88,106,.32);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:'Inter',sans-serif;background:#f5f5f7;color:var(--gray8);-webkit-font-smoothing:antialiased;min-height:100vh}
 a{text-decoration:none;color:inherit}
 button{font-family:'Inter',sans-serif;cursor:pointer}
+img{display:block}
+
+@keyframes shine{0%{left:-100%}100%{left:200%}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+@keyframes pulseDot{0%{box-shadow:0 0 0 0 rgba(34,197,94,.55)}70%{box-shadow:0 0 0 9px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@keyframes shimmer{0%{background-position:-1000px 0}100%{background-position:1000px 0}}
+@keyframes fireWiggle{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── TOAST ── */
+.toast{position:fixed;top:18px;right:18px;background:#111827;color:#fff;padding:13px 18px;border-radius:var(--radius);font-size:14px;font-weight:500;display:flex;align-items:center;gap:10px;z-index:9999;transform:translateX(130%);transition:transform .35s cubic-bezier(.34,1.56,.64,1);box-shadow:0 20px 48px rgba(0,0,0,.18);max-width:340px}
+.toast.show{transform:translateX(0)}
+.toast-dot{width:8px;height:8px;border-radius:50%;background:#4ade80;flex-shrink:0;animation:pulseDot 1.6s infinite}
 
 /* ── NAV ── */
-.nav{background:#fff;border-bottom:1px solid var(--gray3);height:58px;display:flex;align-items:center;padding:0 1.5rem;gap:12px;position:sticky;top:0;z-index:100;box-shadow:0 1px 8px rgba(0,0,0,.06)}
-.nav-logo{display:flex;align-items:center;gap:9px;font-size:16px;font-weight:800;color:var(--gray8);letter-spacing:-.3px;text-decoration:none}
-.nav-logo-box{width:32px;height:32px;background:linear-gradient(135deg,#c0586a,#8b1a3a);border-radius:8px;display:flex;align-items:center;justify-content:center}
-.nav-secure{margin-left:auto;display:flex;align-items:center;gap:6px;font-size:12px;color:var(--green-text);font-weight:600;background:var(--green-light);padding:5px 12px;border-radius:100px;border:1px solid #bbf7d0}
+.nav{background:#fff;border-bottom:1px solid var(--gray3);height:60px;display:flex;align-items:center;padding:0 1.5rem;gap:12px;position:sticky;top:0;z-index:100;box-shadow:0 1px 8px rgba(0,0,0,.05)}
+.nav-logo{display:flex;align-items:center;gap:10px;font-size:17px;font-weight:800;color:var(--gray8);letter-spacing:-.3px}
+.nav-logo-box{width:34px;height:34px;background:linear-gradient(135deg,#c0586a,#8b1a3a);border-radius:9px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(192,88,106,.35)}
+.nav-back{font-size:13px;color:var(--gray6);font-weight:500;display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:7px;transition:background .15s,color .15s}
+.nav-back:hover{background:var(--gray1);color:var(--gray8)}
+.nav-secure{margin-left:auto;display:flex;align-items:center;gap:6px;font-size:12px;color:var(--green-text);font-weight:700;background:var(--green-light);padding:6px 12px;border-radius:100px;border:1px solid #bbf7d0}
+.nav-secure::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulseDot 1.6s infinite}
 
 /* ── PROGRESS BAR ── */
 .progress-wrap{background:#fff;border-bottom:1px solid var(--gray3);padding:14px 1.5rem}
@@ -44,30 +64,57 @@ button{font-family:'Inter',sans-serif;cursor:pointer}
 .step-line.done{background:var(--green)}
 @media(max-width:480px){.step-label{display:none}.step-line{width:30px}}
 
+/* ── TOPBAR ── */
+.mae-strip{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 50%,var(--navy) 100%);background-size:200% 100%;animation:shimmer 8s linear infinite;color:#fff;text-align:center;padding:9px 16px;font-size:13px;font-weight:500;display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap}
+.mae-strip strong{color:#fef08a}
+.mae-strip-item{display:inline-flex;align-items:center;gap:6px}
+.mae-strip-sep{opacity:.4}
+@media(max-width:600px){.mae-strip-item:not(:first-child){display:none}}
+
+/* ── LIVE FINALIZANDO ── */
+.live-finalizing{max-width:960px;margin:0 auto;padding:12px 1rem 0;animation:fadeUp .4s}
+.live-finalizing-inner{background:#fff7ed;border:1px solid #fed7aa;border-radius:var(--radius);padding:10px 14px;display:flex;align-items:center;gap:10px;font-size:13px;color:#9a3412;font-weight:600}
+.live-finalizing-inner svg{flex-shrink:0}
+.live-finalizing-inner strong{color:#7c2d12;font-weight:800}
+
 /* ── LAYOUT ── */
-.wrap{max-width:960px;margin:0 auto;padding:1.5rem 1rem 4rem}
+.wrap{max-width:960px;margin:0 auto;padding:1rem 1rem 4rem}
 .grid{display:grid;grid-template-columns:1fr 340px;gap:1.5rem;align-items:start}
-@media(max-width:720px){.grid{grid-template-columns:1fr}}
+@media(max-width:780px){.grid{grid-template-columns:1fr}}
 
 /* ── FORM CARD ── */
-.form-card{background:#fff;border-radius:var(--radius-lg);box-shadow:var(--shadow);overflow:hidden}
-.form-card-header{background:linear-gradient(135deg,var(--rose2) 0%,var(--rose) 100%);padding:18px 24px;display:flex;align-items:center;gap:10px}
-.form-card-header h2{color:#fff;font-size:16px;font-weight:700;letter-spacing:-.2px}
-.form-card-header p{color:rgba(255,255,255,.8);font-size:12px;margin-top:2px}
-.step-icon{width:36px;height:36px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:#fff;flex-shrink:0}
-.form-body{padding:24px}
+.form-card{background:#fff;border-radius:var(--radius-xl);box-shadow:var(--shadow);overflow:hidden}
+.form-card-header{background:linear-gradient(135deg,var(--rose2) 0%,var(--rose) 100%);padding:18px 24px;display:flex;align-items:center;gap:12px;position:relative;overflow:hidden}
+.form-card-header::after{content:"";position:absolute;top:-30px;right:-30px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.08)}
+.form-card-header h2{color:#fff;font-size:17px;font-weight:800;letter-spacing:-.2px}
+.form-card-header p{color:rgba(255,255,255,.85);font-size:12.5px;margin-top:3px}
+.step-icon{width:38px;height:38px;background:rgba(255,255,255,.22);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:#fff;flex-shrink:0;backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.2)}
+.form-body{padding:22px 24px 24px}
+
+.error-banner{background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;padding:11px 14px;border-radius:var(--radius);font-size:13px;margin-bottom:16px;display:flex;align-items:center;gap:8px;font-weight:600;animation:fadeUp .25s}
+
+/* ── SECTION TITLE ── */
+.section-h{font-size:13px;font-weight:700;color:var(--gray7);text-transform:uppercase;letter-spacing:.5px;margin:6px 0 12px;display:flex;align-items:center;gap:7px}
+.section-h::before{content:"";width:4px;height:14px;background:var(--rose);border-radius:2px}
 
 /* ── FIELDS ── */
-.field{margin-bottom:16px}
+.field{margin-bottom:14px}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-@media(max-width:480px){.field-row{grid-template-columns:1fr}}
+.field-row.cols-3{grid-template-columns:1fr 2fr 1fr}
+@media(max-width:520px){.field-row,.field-row.cols-3{grid-template-columns:1fr}}
 label{display:block;font-size:12px;font-weight:600;color:var(--gray7);margin-bottom:6px;letter-spacing:.2px}
+label small{color:var(--gray4);font-weight:500;margin-left:4px}
 .input-wrap{position:relative}
 .input-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--gray4);pointer-events:none;transition:color .15s}
+.input-status{position:absolute;right:12px;top:50%;transform:translateY(-50%);width:18px;height:18px;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;transition:opacity .2s}
+.input-status.ok{opacity:1;color:var(--green)}
+.input-status.err{opacity:1;color:var(--red)}
+.input-status.loading{opacity:1;color:var(--gray5)}
+.input-status.loading svg{animation:spin .9s linear infinite}
 input[type=text],input[type=email],input[type=tel]{
-  width:100%;height:46px;
+  width:100%;height:48px;
   border:1.5px solid var(--gray3);border-radius:var(--radius);
-  padding:0 12px 0 40px;
+  padding:0 36px 0 40px;
   font-size:14px;font-family:'Inter',sans-serif;
   color:var(--gray8);outline:none;
   transition:border-color .15s,box-shadow .15s;
@@ -76,75 +123,107 @@ input[type=text],input[type=email],input[type=tel]{
 input:focus{border-color:var(--rose);box-shadow:0 0 0 3px rgba(192,88,106,.1)}
 input:focus~.input-icon,input:not(:placeholder-shown)~.input-icon{color:var(--rose)}
 input::placeholder{color:var(--gray4)}
-.field-error{font-size:11px;color:#dc2626;margin-top:4px;display:none}
-input.error{border-color:#dc2626}
+input.valid{border-color:#86efac}
+input.valid:focus{box-shadow:0 0 0 3px rgba(34,197,94,.12)}
+input.error{border-color:var(--red);background:#fef9f9}
+input.error:focus{box-shadow:0 0 0 3px rgba(220,38,38,.1)}
+.field.shake input{animation:shake .35s}
+.field-error{font-size:11.5px;color:var(--red);margin-top:5px;display:none;align-items:center;gap:5px;font-weight:500}
+.field-error.show{display:flex;animation:fadeUp .2s}
+.field-help{font-size:11px;color:var(--gray5);margin-top:4px}
+.field-help.success{color:var(--green-text);font-weight:500}
+
+/* ── DATA NOTICE ── */
+.data-notice{background:var(--gray1);border-radius:var(--radius);padding:12px 14px;margin-bottom:18px;font-size:12px;color:var(--gray6);display:flex;align-items:flex-start;gap:8px;border:1px solid var(--gray3);line-height:1.5}
+.data-notice svg{flex-shrink:0;margin-top:1px}
 
 /* ── SUBMIT BTN ── */
-.btn-submit-wrap{position:relative;margin-top:8px;overflow:hidden;border-radius:var(--radius-lg)}
 .btn-submit{
-  width:100%;height:56px;
+  width:100%;height:58px;
   background:linear-gradient(135deg,#c0586a 0%,#8b1a3a 100%);
   color:#fff;border:none;border-radius:var(--radius-lg);
   font-size:16px;font-weight:800;letter-spacing:.3px;
   cursor:pointer;
   display:flex;align-items:center;justify-content:center;gap:10px;
-  transition:all .2s;
+  transition:transform .2s,box-shadow .2s;
   box-shadow:var(--shadow-rose);
   position:relative;overflow:hidden;
 }
 .btn-submit::before{
   content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent);
   animation:shine 2.5s infinite;
 }
-@keyframes shine{0%{left:-100%}100%{left:200%}}
-.btn-submit:hover{transform:translateY(-1px);box-shadow:0 8px 28px rgba(192,88,106,.45)}
+.btn-submit:hover{transform:translateY(-1px);box-shadow:0 12px 32px rgba(192,88,106,.45)}
 .btn-submit:active{transform:translateY(0)}
-.btn-submit:disabled{opacity:.65;cursor:not-allowed;transform:none;animation:none}
+.btn-submit:disabled{opacity:.65;cursor:not-allowed;transform:none}
+.btn-submit:disabled::before{animation:none}
 .btn-submit span{position:relative;z-index:1}
+.btn-submit-spinner{width:18px;height:18px;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;display:none}
+.btn-submit.loading .btn-submit-spinner{display:block}
+.btn-submit.loading .btn-submit-icon{display:none}
 
 /* ── TRUST BADGES ── */
 .trust-row{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:14px;flex-wrap:wrap}
 .trust-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--gray5);font-weight:500}
-.trust-item svg{flex-shrink:0}
+
+/* ── TESTIMONIAL ── */
+.testimonial{background:linear-gradient(135deg,#fefce8,#fff);border:1px solid #fde68a;border-radius:var(--radius-lg);padding:14px 16px;margin-top:14px;display:flex;align-items:flex-start;gap:11px;position:relative}
+.testimonial-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#c0586a,#8b1a3a);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0}
+.testimonial-body{flex:1;min-width:0}
+.testimonial-stars{display:flex;gap:1px;margin-bottom:3px}
+.testimonial-stars span{color:#f59e0b;font-size:13px}
+.testimonial-text{font-size:12.5px;color:var(--gray7);line-height:1.5;font-style:italic;margin-bottom:4px}
+.testimonial-name{font-size:11.5px;color:var(--gray6);font-weight:600;display:flex;align-items:center;gap:6px}
+.testimonial-name .verify-badge{font-size:9px;font-weight:700;color:var(--green-text);background:var(--green-light);padding:2px 6px;border-radius:999px;letter-spacing:.3px}
 
 /* ── ORDER SUMMARY ── */
-.summary-card{background:#fff;border-radius:var(--radius-lg);box-shadow:var(--shadow);position:sticky;top:80px;overflow:hidden}
-.summary-header{background:linear-gradient(135deg,var(--gold) 0%,#8b6914 100%);padding:14px 18px}
+.summary-card{background:#fff;border-radius:var(--radius-xl);box-shadow:var(--shadow);position:sticky;top:80px;overflow:hidden}
+.summary-header{background:linear-gradient(135deg,#374151,#1f2937);padding:14px 18px;display:flex;align-items:center;gap:8px}
 .summary-header h3{color:#fff;font-size:14px;font-weight:700;letter-spacing:.2px}
 .summary-body{padding:18px}
-.summary-img{width:100%;aspect-ratio:1;background:var(--gray1);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;margin-bottom:14px;overflow:hidden;border:1px solid var(--gray3)}
-.summary-img img{max-width:90%;max-height:90%;object-fit:contain}
-.summary-name{font-size:13px;font-weight:600;color:var(--gray8);line-height:1.4;margin-bottom:12px}
+.summary-img{width:100%;aspect-ratio:1;background:linear-gradient(135deg,#fff7f8,#fff);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;margin-bottom:14px;overflow:hidden;border:1px solid var(--rose-border);position:relative}
+.summary-img img{max-width:88%;max-height:88%;object-fit:contain}
+.summary-img-flag{position:absolute;top:8px;right:8px;background:linear-gradient(135deg,var(--rose),var(--rose2));color:#fff;font-size:10.5px;font-weight:800;padding:4px 9px;border-radius:6px;box-shadow:0 4px 10px rgba(192,88,106,.35);letter-spacing:.3px}
+.summary-name{font-size:13px;font-weight:600;color:var(--gray8);line-height:1.45;margin-bottom:12px}
 .summary-price-old{font-size:12px;color:var(--gray4);text-decoration:line-through;margin-bottom:3px}
 .summary-price-main{font-size:28px;font-weight:800;color:var(--gray8);letter-spacing:-1px;margin-bottom:2px}
 .summary-price-badge{display:inline-block;background:#dcfce7;color:var(--green-text);font-size:11px;font-weight:700;padding:3px 9px;border-radius:100px;margin-bottom:10px}
 .summary-installment{font-size:12px;color:var(--gray6);margin-bottom:12px}
-.summary-installment strong{color:var(--navy)}
-.summary-pix{background:var(--green-light);border:1px solid #bbf7d0;border-radius:var(--radius);padding:8px 12px;font-size:12px;color:var(--green-text);font-weight:600;display:flex;align-items:center;gap:6px;margin-bottom:14px}
+.summary-installment strong{color:var(--navy);font-weight:700}
+.summary-pix{background:var(--green-light);border:1px solid #bbf7d0;border-radius:var(--radius);padding:9px 12px;font-size:12px;color:var(--green-text);font-weight:600;display:flex;align-items:center;gap:7px;margin-bottom:14px;line-height:1.4}
 .summary-divider{border:none;border-top:1px solid var(--gray3);margin:12px 0}
-.summary-row{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;align-items:center}
+.summary-row{display:flex;justify-content:space-between;font-size:13px;margin-bottom:7px;align-items:center}
 .summary-row .label{color:var(--gray6)}
 .summary-row .value{color:var(--gray8);font-weight:600}
+.summary-row.total{margin-top:10px;padding-top:11px;border-top:2px solid var(--gray3)}
 .summary-row.total .label{font-size:15px;font-weight:700;color:var(--gray8)}
-.summary-row.total .value{font-size:20px;font-weight:800;color:var(--gray8)}
+.summary-row.total .value{font-size:22px;font-weight:800;color:var(--gray8);letter-spacing:-.5px}
 .summary-free{color:var(--green-text);font-weight:700}
-.summary-seals{margin-top:14px;display:flex;flex-direction:column;gap:8px}
-.seal-item{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--gray6);line-height:1.4}
-.seal-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.summary-seals{margin-top:14px;display:flex;flex-direction:column;gap:9px}
+.seal-item{display:flex;align-items:center;gap:9px;font-size:12px;color:var(--gray6);line-height:1.4}
+.seal-icon{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .seal-icon.green{background:var(--green-light)}
 .seal-icon.blue{background:#dbeafe}
 .seal-icon.rose{background:var(--rose-light)}
-.seal-title{font-weight:600;color:var(--gray7);display:block}
+.seal-title{font-weight:700;color:var(--gray7);display:block;font-size:12.5px}
 
-/* ── MAE BANNER ── */
-.mae-strip{background:linear-gradient(135deg,#8b1a3a,#c0586a);color:#fff;text-align:center;padding:9px 16px;font-size:13px;font-weight:500}
-.mae-strip strong{color:#ffd700}
+/* ── COUNTDOWN ── */
+.countdown-mini{background:linear-gradient(135deg,#fef2f2,#fff);border:1.5px solid #fecaca;border-bottom:1px solid #fecaca;padding:10px 14px;display:flex;align-items:center;gap:10px;font-size:12px;color:#991b1b;font-weight:600}
+.countdown-mini-icon{font-size:15px;animation:fireWiggle .9s infinite}
+.countdown-mini-timer{display:flex;gap:4px;margin-left:auto}
+.cd-mini{background:var(--gray8);color:#fff;border-radius:5px;padding:3px 6px;font-size:11px;font-weight:800;min-width:24px;text-align:center;font-variant-numeric:tabular-nums}
+
+footer{background:var(--gray8);color:#a5b4cf;text-align:center;padding:1.4rem;font-size:12px;margin-top:2rem;line-height:1.7}
 </style>
 </head>
 <body>
 
-<!-- NAV -->
+<div class="toast" id="toast">
+  <div class="toast-dot"></div>
+  <span id="toast-msg"></span>
+</div>
+
 <nav class="nav">
   <a class="nav-logo" href="/">
     <div class="nav-logo-box">
@@ -156,108 +235,161 @@ input.error{border-color:#dc2626}
     </div>
     Mercado de Ofertas
   </a>
+  <a class="nav-back" href="/carrinho">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    Voltar ao carrinho
+  </a>
   <div class="nav-secure">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
     Checkout 100% Seguro
   </div>
 </nav>
 
-<!-- PROGRESS -->
 <div class="progress-wrap">
   <div class="progress-inner">
     <div class="progress-steps">
-      <div class="step done">
-        <div class="step-num">✓</div>
-        <span class="step-label">Carrinho</span>
-      </div>
+      <div class="step done"><div class="step-num">✓</div><span class="step-label">Carrinho</span></div>
       <div class="step-line done"></div>
-      <div class="step active">
-        <div class="step-num">2</div>
-        <span class="step-label">Identificação</span>
-      </div>
+      <div class="step active"><div class="step-num">2</div><span class="step-label">Identificação</span></div>
       <div class="step-line"></div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <span class="step-label">Pagamento</span>
-      </div>
+      <div class="step"><div class="step-num">3</div><span class="step-label">Pagamento</span></div>
     </div>
   </div>
 </div>
 
-<!-- DIA DAS MÃES -->
 <div class="mae-strip">
-  🌸 <strong>Especial Dia das Mães:</strong> Frete Grátis + até <strong>70% OFF</strong> — Entrega garantida! 💝
+  <span class="mae-strip-item">🚚 Frete grátis para todo o Brasil</span>
+  <span class="mae-strip-sep">|</span>
+  <span class="mae-strip-item">🔒 <strong>Pagamento seguro</strong></span>
+  <span class="mae-strip-sep">|</span>
+  <span class="mae-strip-item">📄 Nota fiscal incluída</span>
 </div>
 
-<!-- MAIN -->
+<div class="live-finalizing">
+  <div class="live-finalizing-inner">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+    <span><strong id="finalizingCount">14</strong> pessoas estão finalizando uma compra agora — garanta o seu pedido antes que o estoque acabe.</span>
+  </div>
+</div>
+
 <div class="wrap">
   <div class="grid">
 
-    <!-- FORM -->
     <div>
       <div class="form-card">
         <div class="form-card-header">
           <div class="step-icon">2</div>
           <div>
             <h2>Suas informações</h2>
-            <p>Preencha seus dados para continuar com segurança</p>
+            <p>Preencha seus dados para concluir o pedido com segurança</p>
           </div>
         </div>
         <div class="form-body">
           {% if erro %}
-          <div style="background:#fef2f2;border:1px solid #fecaca;color:#dc2626;padding:11px 14px;border-radius:var(--radius);font-size:13px;margin-bottom:16px;display:flex;align-items:center;gap:8px">
-            ⚠️ {{ erro }}
+          <div class="error-banner">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+            {{ erro }}
           </div>
           {% endif %}
 
-          <form id="checkout-form" method="POST" action="/checkout" onsubmit="return submitForm(event)">
+          <form id="checkout-form" method="POST" action="/checkout" novalidate>
             <input type="hidden" name="quantidade" id="qtd-hidden" value="{{ quantidade }}"/>
 
+            <div class="section-h">Dados pessoais</div>
+
             <div class="field-row">
-              <div class="field">
-                <label>Nome completo *</label>
+              <div class="field" id="field-nome">
+                <label for="nome">Nome completo *</label>
                 <div class="input-wrap">
-                  <input type="text" name="nome" id="nome" placeholder="João da Silva" required autocomplete="name"/>
+                  <input type="text" name="nome" id="nome" placeholder="João da Silva" required autocomplete="name" value="{{ usuario.nome if usuario else '' }}"/>
                   <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  <span class="input-status" id="status-nome"></span>
+                </div>
+                <div class="field-error" id="error-nome"></div>
+              </div>
+              <div class="field" id="field-cpf">
+                <label for="cpf">CPF *</label>
+                <div class="input-wrap">
+                  <input type="text" name="cpf" id="cpf" placeholder="000.000.000-00" required autocomplete="off" inputmode="numeric" maxlength="14"/>
+                  <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 8h8M8 12h6"/></svg>
+                  <span class="input-status" id="status-cpf"></span>
+                </div>
+                <div class="field-error" id="error-cpf"></div>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field" id="field-email">
+                <label for="email">E-mail *</label>
+                <div class="input-wrap">
+                  <input type="email" name="email" id="email" placeholder="seu@email.com" required autocomplete="email" value="{{ usuario.email if usuario else '' }}"/>
+                  <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                  <span class="input-status" id="status-email"></span>
+                </div>
+                <div class="field-error" id="error-email"></div>
+              </div>
+              <div class="field" id="field-telefone">
+                <label for="telefone">Celular / WhatsApp *</label>
+                <div class="input-wrap">
+                  <input type="tel" name="telefone" id="telefone" placeholder="(00) 00000-0000" required autocomplete="tel" inputmode="numeric" maxlength="15"/>
+                  <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+                  <span class="input-status" id="status-telefone"></span>
+                </div>
+                <div class="field-error" id="error-telefone"></div>
+              </div>
+            </div>
+
+            <div class="section-h" style="margin-top:18px">Endereço de entrega <small style="font-weight:500;color:var(--gray5);text-transform:none;letter-spacing:0;margin-left:4px">(opcional — confirme no pagamento)</small></div>
+
+            <div class="field-row cols-3">
+              <div class="field" id="field-cep">
+                <label for="cep">CEP</label>
+                <div class="input-wrap">
+                  <input type="text" name="cep" id="cep" placeholder="00000-000" autocomplete="postal-code" inputmode="numeric" maxlength="9"/>
+                  <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  <span class="input-status" id="status-cep"></span>
+                </div>
+                <div class="field-help" id="help-cep">Preenchemos seu endereço automaticamente</div>
+              </div>
+              <div class="field">
+                <label for="rua">Endereço</label>
+                <div class="input-wrap">
+                  <input type="text" name="rua" id="rua" placeholder="Rua das Flores" autocomplete="street-address" style="padding-left:14px"/>
                 </div>
               </div>
               <div class="field">
-                <label>CPF *</label>
+                <label for="numero">Número</label>
                 <div class="input-wrap">
-                  <input type="text" name="cpf" id="cpf" placeholder="000.000.000-00" required autocomplete="off" maxlength="14"/>
-                  <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 8h8M8 12h6"/></svg>
+                  <input type="text" name="numero" id="numero" placeholder="123" inputmode="numeric" style="padding-left:14px"/>
                 </div>
               </div>
             </div>
 
             <div class="field-row">
               <div class="field">
-                <label>E-mail *</label>
+                <label for="bairro">Bairro</label>
                 <div class="input-wrap">
-                  <input type="email" name="email" id="email" placeholder="seu@email.com" required autocomplete="email"/>
-                  <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                  <input type="text" name="bairro" id="bairro" placeholder="Centro" style="padding-left:14px"/>
                 </div>
               </div>
               <div class="field">
-                <label>Celular / WhatsApp *</label>
+                <label for="cidade">Cidade / UF</label>
                 <div class="input-wrap">
-                  <input type="tel" name="telefone" id="telefone" placeholder="(00) 00000-0000" required autocomplete="tel" maxlength="15"/>
-                  <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+                  <input type="text" name="cidade" id="cidade" placeholder="São Paulo / SP" style="padding-left:14px"/>
                 </div>
               </div>
             </div>
 
-            <div style="background:var(--gray1);border-radius:var(--radius);padding:12px 14px;margin-bottom:18px;font-size:12px;color:var(--gray6);display:flex;align-items:flex-start;gap:8px;border:1px solid var(--gray3)">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gray5)" stroke-width="2" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-              <span>Seus dados são usados apenas para processar sua compra e nunca serão compartilhados com terceiros.</span>
+            <div class="data-notice">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gray5)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+              <span>Seus dados são usados apenas para processar sua compra com segurança e agilizar a confirmação do pagamento. Não compartilhamos com terceiros.</span>
             </div>
 
-            <div class="btn-submit-wrap">
-              <button type="submit" class="btn-submit" id="btn-submit">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-                <span id="btn-text">IR PARA O PAGAMENTO SEGURO</span>
-              </button>
-            </div>
+            <button type="submit" class="btn-submit" id="btn-submit">
+              <svg class="btn-submit-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              <span class="btn-submit-spinner"></span>
+              <span id="btn-text">IR PARA O PAGAMENTO SEGURO</span>
+            </button>
 
             <div class="trust-row">
               <div class="trust-item">
@@ -277,41 +409,60 @@ input.error{border-color:#dc2626}
                 Compra garantida
               </div>
             </div>
+
+            <div class="testimonial">
+              <div class="testimonial-avatar">MA</div>
+              <div class="testimonial-body">
+                <div class="testimonial-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+                <div class="testimonial-text">"O checkout foi rapidíssimo, paguei no Pix e recebi o produto em 3 dias. Recomendo muito!"</div>
+                <div class="testimonial-name">Maria Aparecida · São Paulo <span class="verify-badge">VERIFICADO</span></div>
+              </div>
+            </div>
           </form>
         </div>
       </div>
     </div>
 
-    <!-- SUMMARY -->
     <div>
       <div class="summary-card">
         <div class="summary-header">
-          <h3>🛒 Resumo do pedido</h3>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+          <h3>Resumo do pedido</h3>
+        </div>
+        <div class="countdown-mini">
+          <span class="countdown-mini-icon">⏰</span>
+          <span>Esse preço termina em</span>
+          <div class="countdown-mini-timer">
+            <span class="cd-mini" id="cdH">00</span>
+            <span class="cd-mini" id="cdM">00</span>
+            <span class="cd-mini" id="cdS">00</span>
+          </div>
         </div>
         <div class="summary-body">
           <div class="summary-img">
-            <img src="/static/panela.webp" alt="{{ produto.nome }}"/>
+            <span class="summary-img-flag">{{ produto.desconto }}</span>
+            <img src="{{ produto.imagem }}" alt="{{ produto.nome }}"/>
           </div>
           <div class="summary-name">{{ produto.nome }}</div>
           <div class="summary-price-old">R$ {{ "%.2f"|format(produto.preco_antigo * quantidade) }}</div>
           <div class="summary-price-main">R$&nbsp;{{ "%.2f"|format(produto.preco * quantidade) }}</div>
-          <span class="summary-price-badge">{{ produto.desconto }} 🎉</span>
+          <span class="summary-price-badge">🎉 {{ produto.desconto }} aplicado</span>
           <div class="summary-installment">ou <strong>{{ produto.parcelas }}x de R$ {{ "%.2f"|format(produto.parcela_valor * quantidade) }}</strong> sem juros</div>
           <div class="summary-pix">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-            R$ {{ "%.2f"|format(produto.preco * quantidade * 0.95) }} no Pix — 5% extra
+            <div>R$ <strong>{{ "%.2f"|format(produto.preco * quantidade * ((100 - produto.pix_desconto) / 100)) }}</strong> no Pix — {{ produto.pix_desconto }}% extra</div>
           </div>
 
           <hr class="summary-divider"/>
           <div class="summary-row">
             <span class="label">Quantidade</span>
-            <span class="value">{{ quantidade }}x</span>
+            <span class="value">{{ quantidade }}x unidade(s)</span>
           </div>
           <div class="summary-row">
             <span class="label">Frete</span>
             <span class="value summary-free">🚚 Grátis</span>
           </div>
-          <div class="summary-row total" style="margin-top:10px;padding-top:10px;border-top:2px solid var(--gray3)">
+          <div class="summary-row total">
             <span class="label">Total</span>
             <span class="value">R$ {{ "%.2f"|format(produto.preco * quantidade) }}</span>
           </div>
@@ -319,29 +470,29 @@ input.error{border-color:#dc2626}
           <div class="summary-seals">
             <div class="seal-item">
               <div class="seal-icon green">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
               </div>
               <div>
-                <span class="seal-title">Compra 100% Garantida</span>
-                Receba ou devolvemos seu dinheiro
+                <span class="seal-title">Compra 100% garantida</span>
+                Receba o produto ou devolvemos seu dinheiro
               </div>
             </div>
             <div class="seal-item">
               <div class="seal-icon blue">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
               </div>
               <div>
                 <span class="seal-title">Criptografia SSL 256-bit</span>
-                Ambiente seguro e protegido
+                Dados protegidos por tecnologia bancária
               </div>
             </div>
             <div class="seal-item">
               <div class="seal-icon rose">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" stroke-width="2"><path d="M1 4v6h6"/><path d="M23 20v-6h-6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10M23 14l-4.64 4.36A9 9 0 013.51 15"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" stroke-width="2.5"><path d="M1 4v6h6"/><path d="M23 20v-6h-6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10M23 14l-4.64 4.36A9 9 0 013.51 15"/></svg>
               </div>
               <div>
-                <span class="seal-title">Garantia de 7 dias</span>
-                Satisfação ou reembolso total
+                <span class="seal-title">Devolução grátis em 30 dias</span>
+                Sem perguntas, sem custo adicional
               </div>
             </div>
           </div>
@@ -352,50 +503,228 @@ input.error{border-color:#dc2626}
   </div>
 </div>
 
+<footer>
+  <p style="font-size:13px;font-weight:600;color:#e5e7eb;margin-bottom:4px">Mercado de Ofertas</p>
+  <p>© 2026 mercadosdeofertas.shop · Compra segura · Frete grátis para todo o Brasil</p>
+</footer>
+
 <script>
-// ── MÁSCARAS ──────────────────────────────────────────
-document.getElementById('cpf').addEventListener('input', function() {
+let toastTimer;
+function showToast(msg) {
+  document.getElementById('toast-msg').textContent = msg;
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+/* ── ICONS ──────────────────────────────────────────── */
+const ICON_OK   = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>';
+const ICON_ERR  = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>';
+const ICON_LOAD = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12a9 9 0 11-6.219-8.56"/></svg>';
+
+/* ── VALIDATORS ─────────────────────────────────────── */
+function validNome(v){ return v.trim().split(/\s+/).filter(Boolean).length >= 2 && v.trim().length >= 4 }
+function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()) }
+function validTelefone(v){ const d = v.replace(/\D/g,''); return d.length === 10 || d.length === 11 }
+function validCPF(cpf){
+  cpf = cpf.replace(/\D/g,'');
+  if(cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
+  let sum = 0;
+  for(let i=0;i<9;i++) sum += parseInt(cpf[i],10) * (10-i);
+  let d1 = 11 - (sum % 11); if(d1 >= 10) d1 = 0;
+  if(d1 !== parseInt(cpf[9],10)) return false;
+  sum = 0;
+  for(let i=0;i<10;i++) sum += parseInt(cpf[i],10) * (11-i);
+  let d2 = 11 - (sum % 11); if(d2 >= 10) d2 = 0;
+  return d2 === parseInt(cpf[10],10);
+}
+
+/* ── FIELD STATE ────────────────────────────────────── */
+function setFieldState(name, state, message){
+  const input  = document.getElementById(name);
+  const status = document.getElementById('status-' + name);
+  const err    = document.getElementById('error-' + name);
+  const field  = document.getElementById('field-' + name);
+  input.classList.remove('valid','error');
+  status.classList.remove('ok','err','loading');
+  status.innerHTML = '';
+  if(err){err.classList.remove('show');err.innerHTML=''}
+  if(state === 'ok'){
+    input.classList.add('valid');
+    status.classList.add('ok');
+    status.innerHTML = ICON_OK;
+  } else if(state === 'err'){
+    input.classList.add('error');
+    status.classList.add('err');
+    status.innerHTML = ICON_ERR;
+    if(err && message){
+      err.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg> ' + message;
+      err.classList.add('show');
+    }
+    if(field){field.classList.add('shake');setTimeout(()=>field.classList.remove('shake'),400)}
+  } else if(state === 'loading'){
+    status.classList.add('loading');
+    status.innerHTML = ICON_LOAD;
+  }
+}
+
+/* ── MASKS ──────────────────────────────────────────── */
+const cpfInput = document.getElementById('cpf');
+cpfInput.addEventListener('input', function() {
   let v = this.value.replace(/\D/g, '').slice(0, 11);
   v = v.replace(/(\d{3})(\d)/, '$1.$2')
        .replace(/(\d{3})(\d)/, '$1.$2')
        .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
   this.value = v;
+  if(v.replace(/\D/g,'').length === 11){
+    setFieldState('cpf', validCPF(v) ? 'ok' : 'err', 'CPF inválido. Verifique os números digitados.');
+  } else {
+    setFieldState('cpf', null);
+  }
 });
 
-document.getElementById('telefone').addEventListener('input', function() {
+const telInput = document.getElementById('telefone');
+telInput.addEventListener('input', function() {
   let v = this.value.replace(/\D/g, '').slice(0, 11);
   if (v.length <= 10)
     v = v.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
   else
     v = v.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
-  this.value = v;
+  this.value = v.replace(/-$/, '').replace(/\)\s$/, ')');
+  setFieldState('telefone', validTelefone(this.value) ? 'ok' : null);
 });
 
-// ── SUBMIT ────────────────────────────────────────────
-function submitForm(e) {
-  const nome = document.getElementById('nome').value.trim();
-  const email = document.getElementById('email').value.trim();
-  const cpf = document.getElementById('cpf').value.trim();
-  const tel = document.getElementById('telefone').value.trim();
+document.getElementById('nome').addEventListener('blur', function(){
+  if(!this.value.trim()) return setFieldState('nome', null);
+  setFieldState('nome', validNome(this.value) ? 'ok' : 'err', 'Digite seu nome completo (nome e sobrenome).');
+});
 
-  if (!nome || !email || !cpf || !tel) {
-    alert('Por favor, preencha todos os campos obrigatórios.');
+document.getElementById('email').addEventListener('blur', function(){
+  if(!this.value.trim()) return setFieldState('email', null);
+  setFieldState('email', validEmail(this.value) ? 'ok' : 'err', 'Digite um e-mail válido (ex: nome@email.com).');
+});
+
+/* ── CEP autofill via ViaCEP ────────────────────────── */
+const cepInput = document.getElementById('cep');
+cepInput.addEventListener('input', function() {
+  let v = this.value.replace(/\D/g, '').slice(0, 8);
+  if(v.length > 5) v = v.slice(0,5) + '-' + v.slice(5);
+  this.value = v;
+  if(v.replace(/\D/g,'').length === 8){
+    lookupCep(v.replace(/\D/g,''));
+  }
+});
+
+async function lookupCep(cep){
+  setFieldState('cep', 'loading');
+  document.getElementById('help-cep').textContent = 'Buscando endereço...';
+  try {
+    const r = await fetch('https://viacep.com.br/ws/' + cep + '/json/');
+    const d = await r.json();
+    if(d.erro){throw new Error('CEP não encontrado')}
+    document.getElementById('rua').value     = d.logradouro || '';
+    document.getElementById('bairro').value  = d.bairro     || '';
+    document.getElementById('cidade').value  = (d.localidade || '') + (d.uf ? ' / ' + d.uf : '');
+    setFieldState('cep', 'ok');
+    const help = document.getElementById('help-cep');
+    help.textContent = '✓ Endereço preenchido — confira o número';
+    help.className = 'field-help success';
+    document.getElementById('numero').focus();
+  } catch(_) {
+    setFieldState('cep', 'err', 'CEP não encontrado. Verifique e tente novamente.');
+    document.getElementById('help-cep').textContent = 'Preenchemos seu endereço automaticamente';
+  }
+}
+
+/* ── SUBMIT VALIDATION ──────────────────────────────── */
+document.getElementById('checkout-form').addEventListener('submit', function(e){
+  let firstError = null;
+  const v = {
+    nome:     document.getElementById('nome').value.trim(),
+    email:    document.getElementById('email').value.trim(),
+    cpf:      document.getElementById('cpf').value.trim(),
+    telefone: document.getElementById('telefone').value.trim()
+  };
+
+  if(!validNome(v.nome)){
+    setFieldState('nome', 'err', 'Digite seu nome completo (nome e sobrenome).');
+    firstError = firstError || 'nome';
+  } else setFieldState('nome', 'ok');
+
+  if(!validEmail(v.email)){
+    setFieldState('email', 'err', 'Digite um e-mail válido.');
+    firstError = firstError || 'email';
+  } else setFieldState('email', 'ok');
+
+  if(!validCPF(v.cpf)){
+    setFieldState('cpf', 'err', 'CPF inválido. Confira os números.');
+    firstError = firstError || 'cpf';
+  } else setFieldState('cpf', 'ok');
+
+  if(!validTelefone(v.telefone)){
+    setFieldState('telefone', 'err', 'Telefone inválido. Use o formato (DD) 00000-0000.');
+    firstError = firstError || 'telefone';
+  } else setFieldState('telefone', 'ok');
+
+  if(firstError){
+    e.preventDefault();
+    showToast('Verifique os campos marcados em vermelho.');
+    document.getElementById(firstError).focus();
+    document.getElementById('field-' + firstError).scrollIntoView({behavior:'smooth', block:'center'});
     return false;
   }
 
   const btn = document.getElementById('btn-submit');
   const txt = document.getElementById('btn-text');
   btn.disabled = true;
-  txt.textContent = 'Redirecionando para pagamento...';
+  btn.classList.add('loading');
+  txt.textContent = 'Redirecionando para o pagamento seguro...';
+});
 
-  return true;
-}
+/* ── COUNTDOWN ──────────────────────────────────────── */
+(function(){
+  let endTime = parseInt(localStorage.getItem('offer_end') || '0', 10);
+  const now = Date.now();
+  if(!endTime || endTime < now){
+    endTime = now + (4*3600 + 27*60 + 13)*1000;
+    localStorage.setItem('offer_end', String(endTime));
+  }
+  function pad(n){return String(n).padStart(2,'0')}
+  function tick(){
+    const left = Math.max(0, Math.floor((endTime - Date.now())/1000));
+    document.getElementById('cdH').textContent = pad(Math.floor(left/3600));
+    document.getElementById('cdM').textContent = pad(Math.floor((left%3600)/60));
+    document.getElementById('cdS').textContent = pad(left%60);
+  }
+  tick();setInterval(tick,1000);
+})();
 
-// Lê quantidade do localStorage ou URL
+/* ── LIVE FINALIZING COUNT ──────────────────────────── */
+(function(){
+  const el = document.getElementById('finalizingCount');
+  let n = 11 + Math.floor(Math.random()*8);
+  el.textContent = n;
+  setInterval(()=>{
+    n = Math.max(6, Math.min(28, n + (Math.random()<.5?-1:1)*Math.floor(Math.random()*2+1)));
+    el.textContent = n;
+  }, 5000);
+})();
+
+/* ── Sync hidden quantity from URL ──────────────────── */
 (function() {
   const urlQtd = new URLSearchParams(location.search).get('qtd');
   if (urlQtd) document.getElementById('qtd-hidden').value = urlQtd;
 })();
+
+/* ── Pre-validate on load if user is logged in ──────── */
+(function(){
+  const nome = document.getElementById('nome').value.trim();
+  const email = document.getElementById('email').value.trim();
+  if(nome && validNome(nome)) setFieldState('nome', 'ok');
+  if(email && validEmail(email)) setFieldState('email', 'ok');
+})();
 </script>
+<script src="/static/visitor-tracker.js"></script>
 </body>
 </html>

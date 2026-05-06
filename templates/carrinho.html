@@ -3,186 +3,316 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Meu Carrinho – Mercado Liquida</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<title>Meu Carrinho – Mercado de Ofertas</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
 <style>
-:root{--navy:#1a2744;--navy2:#243a7a;--green:#16a34a;--green-light:#dcfce7;--green-text:#15803d;--red:#dc2626;--red-light:#fee2e2;--gray1:#f8f9fa;--gray2:#f0f0f0;--gray3:#e5e7eb;--gray4:#d1d5db;--gray5:#9ca3af;--gray6:#6b7280;--gray7:#374151;--gray8:#1f2937;--radius:8px;--radius-lg:12px;--shadow:0 1px 3px rgba(0,0,0,.08);--shadow-md:0 4px 12px rgba(0,0,0,.08)}
+:root{
+  --navy:#1a2744;--navy2:#243a7a;
+  --rose:#c0586a;--rose2:#8b1a3a;--rose-light:#fdf0f2;--rose-border:#f3c7cf;
+  --green:#16a34a;--green-light:#dcfce7;--green-text:#15803d;
+  --yellow:#f59e0b;--orange:#ea580c;
+  --red:#dc2626;--red-light:#fee2e2;
+  --gray1:#f8f9fa;--gray2:#f0f0f0;--gray3:#e5e7eb;--gray4:#d1d5db;
+  --gray5:#9ca3af;--gray6:#6b7280;--gray7:#374151;--gray8:#1f2937;
+  --radius:10px;--radius-lg:14px;--radius-xl:18px;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.08);
+  --shadow:0 8px 24px rgba(0,0,0,.07),0 2px 6px rgba(0,0,0,.04);
+  --shadow-lg:0 20px 48px rgba(0,0,0,.10),0 4px 16px rgba(0,0,0,.05);
+}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',sans-serif;background:var(--gray2);color:var(--gray8);-webkit-font-smoothing:antialiased}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:#f5f5f7;color:var(--gray8);-webkit-font-smoothing:antialiased}
 button{font-family:'Inter',sans-serif;cursor:pointer}
+a{text-decoration:none;color:inherit}
+img{display:block}
+
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+@keyframes pulseDot{0%{box-shadow:0 0 0 0 rgba(34,197,94,.55)}70%{box-shadow:0 0 0 9px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shimmer{0%{background-position:-1000px 0}100%{background-position:1000px 0}}
+@keyframes fireWiggle{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+@keyframes slideOutRight{to{opacity:0;transform:translateX(40px);max-height:0;padding-top:0;padding-bottom:0;border-color:transparent}}
+@keyframes pulseRose{0%,100%{box-shadow:0 8px 20px rgba(192,88,106,.28)}50%{box-shadow:0 12px 30px rgba(192,88,106,.45)}}
 
 /* TOAST */
-.toast{position:fixed;top:20px;right:20px;background:var(--gray8);color:#fff;padding:11px 16px;border-radius:var(--radius);font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px;z-index:9999;transform:translateX(120%);transition:transform .3s cubic-bezier(.34,1.56,.64,1);box-shadow:0 8px 24px rgba(0,0,0,.15)}
+.toast{position:fixed;top:18px;right:18px;background:#111827;color:#fff;padding:13px 18px;border-radius:var(--radius);font-size:14px;font-weight:500;display:flex;align-items:center;gap:10px;z-index:9999;transform:translateX(130%);transition:transform .35s cubic-bezier(.34,1.56,.64,1);box-shadow:var(--shadow-lg);max-width:340px}
 .toast.show{transform:translateX(0)}
+.toast-dot{width:8px;height:8px;border-radius:50%;background:#4ade80;flex-shrink:0;animation:pulseDot 1.6s infinite}
+
+/* TOPBAR */
+.topbar{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 50%,var(--navy) 100%);background-size:200% 100%;animation:shimmer 8s linear infinite;color:#fff;padding:9px 1.5rem;text-align:center;font-size:13px;font-weight:500;letter-spacing:.2px;display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap}
+.topbar strong{color:#fef08a}
+.topbar-item{display:inline-flex;align-items:center;gap:6px}
+.topbar-sep{opacity:.4}
+@media(max-width:600px){.topbar-item:not(:first-child){display:none}}
 
 /* NAV */
-.nav{background:var(--navy);height:56px;display:flex;align-items:center;padding:0 1.5rem;gap:1rem;position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.2)}
-.nav-logo{display:flex;align-items:center;gap:9px;color:#fff;font-size:17px;font-weight:700;text-decoration:none}
-.nav-logo-box{width:28px;height:28px;background:#fff;border-radius:6px;display:flex;align-items:center;justify-content:center}
+.nav{background:#fff;height:68px;display:flex;align-items:center;padding:0 1.5rem;gap:1rem;position:sticky;top:0;z-index:50;box-shadow:0 1px 0 var(--gray3),0 8px 24px rgba(0,0,0,.05)}
+.nav-logo{display:flex;align-items:center;gap:10px;color:var(--gray8);font-size:18px;font-weight:800;letter-spacing:-.3px}
+.nav-logo-box{width:36px;height:36px;background:linear-gradient(135deg,var(--rose),var(--rose2));border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(192,88,106,.35);transition:transform .25s}
+.nav-logo:hover .nav-logo-box{transform:rotate(-6deg) scale(1.05)}
 .nav-right{margin-left:auto;display:flex;align-items:center;gap:4px}
-.nav-btn{display:flex;align-items:center;gap:6px;color:#fff;font-size:13px;padding:6px 10px;border-radius:var(--radius);cursor:pointer;transition:background .15s;border:none;background:none;text-decoration:none}
-.nav-btn:hover{background:rgba(255,255,255,.12)}
+.nav-btn{display:flex;align-items:center;gap:6px;color:var(--gray7);font-size:13px;padding:8px 11px;border-radius:var(--radius);transition:background .15s,color .15s;border:none;background:none;font-weight:500}
+.nav-btn:hover{background:var(--gray1);color:var(--gray8)}
 
 /* BREADCRUMB */
-.breadcrumb{padding:10px 0;font-size:12px;color:var(--gray6);display:flex;align-items:center;gap:5px}
-.breadcrumb a{color:var(--navy);text-decoration:none;cursor:pointer;transition:color .15s}
-.breadcrumb a:hover{color:var(--navy2);text-decoration:underline}
+.breadcrumb{padding:11px 0;font-size:12px;color:var(--gray5);display:flex;align-items:center;gap:5px}
+.breadcrumb a{color:var(--gray6);font-weight:500}
+.breadcrumb a:hover{color:var(--rose)}
 
 /* LAYOUT */
-.wrap{max-width:1100px;margin:0 auto;padding:1rem 1.5rem 3rem}
-.page-title{font-size:22px;font-weight:700;margin-bottom:1rem;color:var(--gray8)}
-.page-title span{font-size:16px;font-weight:400;color:var(--gray5);margin-left:6px}
-.grid{display:grid;grid-template-columns:1fr 320px;gap:1.25rem;align-items:start}
-@media(max-width:720px){.grid{grid-template-columns:1fr}}
+.wrap{max-width:1100px;margin:0 auto;padding:0 1.5rem 5rem}
+.page-title{font-size:24px;font-weight:800;margin-bottom:14px;color:var(--gray8);letter-spacing:-.5px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.page-title-count{font-size:13px;font-weight:500;color:var(--gray5);background:var(--gray2);padding:3px 11px;border-radius:999px}
+.grid{display:grid;grid-template-columns:1fr 340px;gap:1.25rem;align-items:start}
+@media(max-width:780px){.grid{grid-template-columns:1fr}}
 
-/* CART ITEMS */
-.cart-card{background:#fff;border-radius:var(--radius-lg);box-shadow:var(--shadow);overflow:hidden}
-.cart-header{padding:14px 18px;border-bottom:1px solid var(--gray3);display:flex;align-items:center;justify-content:space-between}
-.cart-header-title{font-size:14px;font-weight:600;color:var(--gray8)}
-.select-all{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--gray6);cursor:pointer;user-select:none}
-.select-all input{cursor:pointer;accent-color:var(--navy);width:15px;height:15px}
+/* FREE SHIPPING BANNER */
+.ship-progress{background:linear-gradient(135deg,#dcfce7 0%,#fff 100%);border:1.5px solid #bbf7d0;border-radius:var(--radius-lg);padding:13px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;animation:fadeUp .4s}
+.ship-progress-icon{width:36px;height:36px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1.5px solid #bbf7d0}
+.ship-progress-text{flex:1;min-width:0}
+.ship-progress-title{font-size:13px;font-weight:700;color:var(--green-text);margin-bottom:5px;display:flex;align-items:center;gap:6px}
+.ship-progress-bar{height:6px;background:rgba(22,163,74,.18);border-radius:4px;overflow:hidden}
+.ship-progress-fill{height:100%;background:linear-gradient(90deg,#16a34a,#15803d);border-radius:4px;width:100%;transition:width .4s}
 
-.cart-item{display:flex;align-items:flex-start;gap:14px;padding:16px 18px;border-bottom:1px solid var(--gray3);transition:background .15s}
+/* COUNTDOWN MINI */
+.countdown-mini{background:linear-gradient(135deg,#fef2f2,#fff);border:1.5px solid #fecaca;border-radius:var(--radius-lg);padding:11px 14px;margin-bottom:14px;display:flex;align-items:center;gap:11px;animation:fadeUp .5s}
+.countdown-mini-icon{font-size:18px;animation:fireWiggle .9s infinite}
+.countdown-mini-text{font-size:12.5px;color:#991b1b;font-weight:600;flex:1;line-height:1.4}
+.countdown-mini-text strong{color:var(--gray8);display:block;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.4px;margin-bottom:1px}
+.countdown-mini-timer{display:flex;gap:4px;flex-shrink:0}
+.cd-mini{background:var(--gray8);color:#fff;border-radius:5px;padding:4px 7px;font-size:12px;font-weight:800;min-width:28px;text-align:center;font-variant-numeric:tabular-nums}
+
+/* CART CARD */
+.cart-card{background:#fff;border-radius:var(--radius-xl);box-shadow:var(--shadow);overflow:hidden}
+.cart-header{padding:14px 18px;border-bottom:1px solid var(--gray3);display:flex;align-items:center;justify-content:space-between;background:linear-gradient(180deg,#fff,#fafbfc)}
+.cart-header-title{font-size:14px;font-weight:700;color:var(--gray8);display:flex;align-items:center;gap:7px}
+.cart-header-watching{font-size:11px;color:var(--gray6);display:flex;align-items:center;gap:5px;font-weight:500}
+.cart-header-watching::before{content:"";width:6px;height:6px;border-radius:50%;background:#ef4444;animation:pulseDot 1.6s infinite}
+
+.cart-item{display:flex;align-items:flex-start;gap:14px;padding:18px;border-bottom:1px solid var(--gray3);transition:background .15s,opacity .3s,transform .3s,max-height .3s,padding .3s,border-color .3s;position:relative}
 .cart-item:last-child{border-bottom:none}
 .cart-item:hover{background:var(--gray1)}
-.item-check{flex-shrink:0;margin-top:2px}
-.item-check input{cursor:pointer;accent-color:var(--navy);width:15px;height:15px}
-.item-img{width:76px;height:76px;border-radius:var(--radius);background:var(--gray1);border:1px solid var(--gray3);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;overflow:hidden;transition:opacity .15s}
-.item-img:hover{opacity:.85}
-.item-img svg{width:70%;height:70%}
+.cart-item.removing{animation:slideOutRight .35s forwards}
+.item-img{width:88px;height:88px;border-radius:var(--radius);background:linear-gradient(135deg,#fff7f8,#fff);border:1px solid var(--rose-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;overflow:hidden;transition:transform .25s,box-shadow .25s}
+.item-img:hover{transform:scale(1.04);box-shadow:var(--shadow-sm)}
+.item-img img{max-width:88%;max-height:88%;object-fit:contain}
 .item-body{flex:1;min-width:0}
-.item-name{font-size:14px;font-weight:500;color:var(--gray8);margin-bottom:4px;line-height:1.4;cursor:pointer;transition:color .15s}
-.item-name:hover{color:var(--navy)}
-.item-seller{font-size:11px;color:var(--gray5);margin-bottom:8px}
-.item-seller strong{color:var(--navy);cursor:pointer}
-.item-badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
-.item-badge{font-size:10px;font-weight:600;padding:2px 7px;border-radius:3px}
+.item-name{font-size:14px;font-weight:600;color:var(--gray8);margin-bottom:4px;line-height:1.4;cursor:pointer;transition:color .15s}
+.item-name:hover{color:var(--rose2)}
+.item-seller{font-size:11.5px;color:var(--gray5);margin-bottom:8px}
+.item-seller strong{color:var(--rose2);cursor:pointer;font-weight:600}
+.item-badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:11px}
+.item-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.2px}
 .badge-free{background:var(--green-light);color:var(--green-text)}
 .badge-orig{background:#dbeafe;color:#1d4ed8}
+.badge-fast{background:#fef3c7;color:#92400e}
 .item-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.item-price-col{margin-left:auto;text-align:right;flex-shrink:0}
+.item-price-col{margin-left:auto;text-align:right;flex-shrink:0;min-width:120px}
 .item-price-old{font-size:11px;color:var(--gray4);text-decoration:line-through}
-.item-price{font-size:17px;font-weight:700;color:var(--gray8)}
+.item-price{font-size:18px;font-weight:800;color:var(--gray8);letter-spacing:-.3px}
 .item-installment{font-size:11px;color:var(--gray5);margin-top:2px}
+.item-saving{display:inline-block;font-size:10px;font-weight:700;color:var(--green-text);background:var(--green-light);padding:2px 6px;border-radius:999px;margin-top:4px}
 
 /* QTY */
-.qty-ctrl{display:flex;align-items:center;border:1.5px solid var(--gray3);border-radius:var(--radius);overflow:hidden}
-.qty-b{width:32px;height:32px;border:none;background:#fff;font-size:17px;color:var(--gray7);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;line-height:1}
-.qty-b:hover{background:var(--gray2)}
-.qty-b:disabled{color:var(--gray4);cursor:not-allowed}
-.qty-n{width:38px;text-align:center;font-size:14px;font-weight:600;border:none;outline:none;font-family:'Inter',sans-serif;color:var(--gray8);background:#fff}
-.item-del{border:none;background:none;color:var(--gray5);font-size:12px;cursor:pointer;padding:4px 6px;border-radius:4px;transition:color .15s,background .15s;display:flex;align-items:center;gap:4px}
+.qty-ctrl{display:flex;align-items:center;border:1.5px solid var(--gray3);border-radius:var(--radius);overflow:hidden;background:#fff}
+.qty-b{width:34px;height:34px;border:none;background:#fff;font-size:17px;color:var(--gray7);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s,color .15s;line-height:1}
+.qty-b:hover{background:var(--rose-light);color:var(--rose2)}
+.qty-b:disabled{color:var(--gray4);cursor:not-allowed;background:#fff}
+.qty-n{width:38px;text-align:center;font-size:14px;font-weight:700;border:none;outline:none;font-family:'Inter',sans-serif;color:var(--gray8);background:#fff;-moz-appearance:textfield}
+.qty-n::-webkit-inner-spin-button,.qty-n::-webkit-outer-spin-button{-webkit-appearance:none}
+.item-del,.item-save{border:none;background:none;color:var(--gray5);font-size:12px;cursor:pointer;padding:5px 8px;border-radius:5px;transition:color .15s,background .15s;display:flex;align-items:center;gap:4px;font-weight:500}
 .item-del:hover{color:var(--red);background:var(--red-light)}
-.item-save{border:none;background:none;color:var(--gray5);font-size:12px;cursor:pointer;padding:4px 6px;border-radius:4px;transition:color .15s,background .15s;display:flex;align-items:center;gap:4px}
-.item-save:hover{color:var(--navy);background:#dbeafe}
+.item-save:hover{color:var(--rose2);background:var(--rose-light)}
 
 /* EMPTY */
 .empty-state{padding:3rem 2rem;text-align:center}
-.empty-icon{width:72px;height:72px;background:var(--gray1);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem}
-.empty-title{font-size:18px;font-weight:600;margin-bottom:6px;color:var(--gray8)}
+.empty-icon{width:88px;height:88px;background:linear-gradient(135deg,var(--rose-light),#fff);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.2rem;border:1px solid var(--rose-border)}
+.empty-title{font-size:20px;font-weight:800;margin-bottom:6px;color:var(--gray8);letter-spacing:-.3px}
 .empty-sub{font-size:14px;color:var(--gray5);margin-bottom:1.5rem}
-.btn-continue{display:inline-flex;align-items:center;gap:7px;padding:11px 22px;background:var(--navy);color:#fff;border-radius:var(--radius);font-size:14px;font-weight:600;text-decoration:none;transition:background .15s;cursor:pointer;border:none}
-.btn-continue:hover{background:var(--navy2)}
+.btn-continue{display:inline-flex;align-items:center;gap:8px;padding:13px 26px;background:linear-gradient(135deg,var(--rose),var(--rose2));color:#fff;border-radius:var(--radius);font-size:14px;font-weight:700;cursor:pointer;border:none;box-shadow:0 6px 16px rgba(192,88,106,.3);transition:transform .15s,box-shadow .15s}
+.btn-continue:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(192,88,106,.4)}
+
+/* UPSELL */
+.upsell-card{background:#fff;border-radius:var(--radius-xl);box-shadow:var(--shadow);padding:18px;margin-top:14px;animation:fadeUp .6s}
+.upsell-title{font-size:15px;font-weight:700;color:var(--gray8);margin-bottom:12px;display:flex;align-items:center;gap:8px;letter-spacing:-.2px}
+.upsell-row{display:flex;gap:11px;overflow-x:auto;scrollbar-width:thin;padding-bottom:4px}
+.upsell-row::-webkit-scrollbar{height:6px}
+.upsell-row::-webkit-scrollbar-thumb{background:var(--gray3);border-radius:4px}
+.upsell-item{flex:0 0 168px;background:var(--gray1);border:1px solid var(--gray3);border-radius:var(--radius-lg);padding:11px;transition:all .2s;cursor:pointer}
+.upsell-item:hover{background:#fff;border-color:var(--rose-border);transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+.upsell-img{width:100%;aspect-ratio:1;background:#fff;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:38px;margin-bottom:8px;border:1px solid var(--gray3)}
+.upsell-name{font-size:12px;font-weight:600;color:var(--gray7);line-height:1.35;margin-bottom:6px;min-height:32px}
+.upsell-price{font-size:14px;font-weight:800;color:var(--rose2);margin-bottom:8px}
+.upsell-price small{display:block;font-size:11px;color:var(--gray5);font-weight:500;text-decoration:line-through}
+.upsell-btn{width:100%;height:32px;background:#fff;border:1.5px solid var(--gray3);border-radius:6px;font-size:11.5px;font-weight:700;color:var(--gray7);cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:5px}
+.upsell-btn:hover{background:var(--gray8);color:#fff;border-color:var(--gray8)}
 
 /* SUMMARY CARD */
-.summary-card{background:#fff;border-radius:var(--radius-lg);box-shadow:var(--shadow);padding:1.25rem;position:sticky;top:68px}
-.summary-title{font-size:15px;font-weight:600;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--gray3)}
-.summary-row{display:flex;justify-content:space-between;font-size:14px;color:var(--gray6);margin-bottom:8px}
-.summary-row.discount{color:var(--green-text);font-weight:500}
-.summary-row.total{font-size:17px;font-weight:700;color:var(--gray8);border-top:1px solid var(--gray3);padding-top:12px;margin-top:6px}
-.summary-pix{background:var(--green-light);border-radius:var(--radius);padding:9px 12px;font-size:13px;color:var(--green-text);font-weight:600;margin:10px 0 14px;display:flex;align-items:center;gap:8px}
+.summary-wrap{position:sticky;top:84px}
+.summary-card{background:#fff;border-radius:var(--radius-xl);box-shadow:var(--shadow);padding:1.25rem;border:1px solid var(--gray3);overflow:hidden}
+.summary-title{font-size:15px;font-weight:800;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--gray3);color:var(--gray8);display:flex;align-items:center;gap:8px}
+.summary-row{display:flex;justify-content:space-between;font-size:13.5px;color:var(--gray6);margin-bottom:9px;align-items:center}
+.summary-row.discount{color:var(--green-text);font-weight:600}
+.summary-row.total{font-size:18px;font-weight:800;color:var(--gray8);border-top:1.5px solid var(--gray3);padding-top:13px;margin-top:8px;letter-spacing:-.3px}
+.summary-saved{background:linear-gradient(135deg,#dcfce7,#fff);border:1px solid #bbf7d0;border-radius:var(--radius);padding:9px 12px;font-size:12px;color:var(--green-text);font-weight:700;margin:6px 0 12px;display:flex;align-items:center;gap:7px}
+.summary-pix{background:var(--green-light);border:1px solid #bbf7d0;border-radius:var(--radius);padding:10px 12px;font-size:13px;color:var(--green-text);font-weight:600;margin:8px 0 14px;display:flex;align-items:center;gap:8px;line-height:1.4}
+.summary-pix small{display:block;font-weight:400;font-size:11px;color:#166534}
 
 /* COUPON */
-.coupon-row{display:flex;gap:8px;margin-bottom:14px}
-.coupon-input{flex:1;height:38px;border:1.5px solid var(--gray3);border-radius:var(--radius);padding:0 10px;font-size:13px;font-family:'Inter',sans-serif;outline:none;transition:border-color .15s}
-.coupon-input:focus{border-color:var(--navy)}
-.coupon-btn{height:38px;padding:0 14px;background:var(--navy);color:#fff;border:none;border-radius:var(--radius);font-size:13px;font-weight:600;cursor:pointer;transition:background .15s;white-space:nowrap}
-.coupon-btn:hover{background:var(--navy2)}
+.coupon-row{display:flex;gap:8px;margin-bottom:8px}
+.coupon-input{flex:1;height:40px;border:1.5px solid var(--gray3);border-radius:var(--radius);padding:0 12px;font-size:13px;font-family:'Inter',sans-serif;outline:none;transition:border-color .15s,box-shadow .15s;text-transform:uppercase}
+.coupon-input:focus{border-color:var(--rose);box-shadow:0 0 0 3px rgba(192,88,106,.1)}
+.coupon-btn{height:40px;padding:0 16px;background:var(--gray8);color:#fff;border:none;border-radius:var(--radius);font-size:13px;font-weight:700;cursor:pointer;transition:background .15s;white-space:nowrap}
+.coupon-btn:hover{background:var(--rose2)}
+.coupon-suggestions{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.coupon-chip{font-size:11px;font-weight:700;color:var(--rose2);background:var(--rose-light);border:1px dashed var(--rose-border);padding:4px 9px;border-radius:999px;cursor:pointer;transition:all .15s;letter-spacing:.3px}
+.coupon-chip:hover{background:var(--rose);color:#fff;border-color:var(--rose)}
+.coupon-applied{background:var(--green-light);border:1px solid #bbf7d0;color:var(--green-text);padding:8px 12px;border-radius:var(--radius);font-size:12.5px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.coupon-applied button{background:none;border:none;color:var(--green-text);cursor:pointer;font-size:14px;line-height:1;padding:2px 6px}
 
 /* CHECKOUT BTN */
-.btn-checkout{width:100%;height:50px;background:var(--navy);color:#fff;border:none;border-radius:var(--radius);font-size:15px;font-weight:700;cursor:pointer;transition:background .15s,transform .1s;display:flex;align-items:center;justify-content:center;gap:8px}
-.btn-checkout:hover{background:var(--navy2)}
-.btn-checkout:active{transform:scale(.98)}
-.btn-checkout:disabled{opacity:.5;cursor:not-allowed}
+.btn-checkout{width:100%;height:54px;background:linear-gradient(135deg,var(--rose),var(--rose2));color:#fff;border:none;border-radius:var(--radius-lg);font-size:15px;font-weight:800;cursor:pointer;transition:transform .15s,box-shadow .15s;display:flex;align-items:center;justify-content:center;gap:9px;box-shadow:0 8px 20px rgba(192,88,106,.28);position:relative;overflow:hidden;letter-spacing:.2px}
+.btn-checkout::before{content:"";position:absolute;top:0;left:-120%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);transform:skewX(-20deg);transition:left .8s}
+.btn-checkout:hover{transform:translateY(-1px);box-shadow:0 12px 28px rgba(192,88,106,.4)}
+.btn-checkout:hover::before{left:140%}
+.btn-checkout:disabled{opacity:.5;cursor:not-allowed;transform:none;background:var(--gray4);box-shadow:none}
 
 /* GUARANTEES */
-.mini-guarantees{margin-top:14px;display:flex;flex-direction:column;gap:7px}
-.mini-g{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--gray6)}
+.mini-guarantees{margin-top:14px;display:flex;flex-direction:column;gap:8px}
+.mini-g{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--gray6)}
+.mini-g strong{color:var(--gray7);font-weight:600}
 
-/* CONTINUE SHOPPING */
-.continue-link{display:flex;align-items:center;gap:6px;color:var(--navy);font-size:13px;font-weight:500;margin-top:12px;justify-content:center;cursor:pointer;transition:color .15s;text-decoration:none}
-.continue-link:hover{color:var(--navy2);text-decoration:underline}
+/* PAYMENT */
+.payment-summary{margin-top:14px;padding-top:12px;border-top:1px solid var(--gray3)}
+.payment-label{font-size:11px;color:var(--gray5);font-weight:600;margin-bottom:7px;text-transform:uppercase;letter-spacing:.5px}
+.payment-icons{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+.pay-icon{height:22px;padding:0 6px;border:1px solid var(--gray3);border-radius:5px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:800;letter-spacing:.4px;color:var(--gray7);min-width:34px}
+.pay-icon.pix{background:linear-gradient(135deg,#32bcad,#2ba89a);color:#fff;border:none}
+.pay-icon.visa{color:#1a1f71}
+.pay-icon.master{color:#eb001b}
+.pay-icon.amex{color:#0078a3}
+.pay-icon.elo{background:#000;color:#fff;border:none}
 
-footer{background:var(--navy);color:#6b7a9c;text-align:center;padding:1rem;font-size:12px;margin-top:2rem}
+.continue-link{display:flex;align-items:center;gap:6px;color:var(--gray6);font-size:13px;font-weight:500;margin-top:14px;justify-content:center;cursor:pointer;transition:color .15s}
+.continue-link:hover{color:var(--rose)}
+
+/* STICKY MOBILE BAR */
+.sticky-checkout{display:none;position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--gray3);box-shadow:0 -8px 32px rgba(0,0,0,.12);padding:12px 16px;z-index:60;align-items:center;gap:12px;backdrop-filter:blur(8px)}
+.sticky-checkout-info{flex:1;min-width:0}
+.sticky-checkout-label{font-size:11px;color:var(--gray5);text-transform:uppercase;font-weight:600;letter-spacing:.4px}
+.sticky-checkout-total{font-size:18px;font-weight:800;color:var(--gray8);letter-spacing:-.3px;line-height:1.1}
+.sticky-checkout-btn{height:46px;padding:0 22px;background:linear-gradient(135deg,var(--rose),var(--rose2));color:#fff;border:none;border-radius:var(--radius);font-size:14px;font-weight:700;display:flex;align-items:center;gap:7px;box-shadow:0 4px 12px rgba(192,88,106,.35);cursor:pointer}
+@media(max-width:780px){.sticky-checkout{display:flex}.summary-wrap{position:static}}
+
+footer{background:var(--gray8);color:#a5b4cf;text-align:center;padding:2rem 1.5rem;font-size:12px;margin-top:3rem;line-height:1.8}
+footer a{color:#d6def0}
+
+@media(max-width:780px){
+  .wrap{padding-bottom:6rem}
+  .item-price-col{margin-left:0;width:100%;text-align:left;display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;border-top:1px dashed var(--gray3);padding-top:10px;margin-top:8px}
+  .item-price{font-size:17px}
+}
 </style>
 </head>
 <body>
 
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast">
+  <div class="toast-dot"></div>
+  <span id="toast-msg"></span>
+</div>
+
+<div class="topbar">
+  <span class="topbar-item">🚚 Frete grátis para todo o Brasil</span>
+  <span class="topbar-sep">|</span>
+  <span class="topbar-item">🔒 <strong>Pagamento 100% seguro</strong></span>
+  <span class="topbar-sep">|</span>
+  <span class="topbar-item">📄 Nota fiscal incluída</span>
+</div>
 
 <nav class="nav">
   <a class="nav-logo" href="/">
     <div class="nav-logo-box">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1a2744" stroke-width="2.5">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5">
         <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
         <line x1="3" y1="6" x2="21" y2="6"/>
         <path d="M16 10a4 4 0 01-8 0"/>
       </svg>
     </div>
-    Mercado Liquida
+    Mercado de Ofertas
   </a>
   <div class="nav-right">
     {% if usuario %}
-    <a class="nav-btn">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      {{ usuario.nome.split()[0] }}
-    </a>
-    <a class="nav-btn" href="/auth/logout">Sair</a>
+      <a class="nav-btn" href="/carrinho">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        {{ usuario.nome.split()[0] }}
+      </a>
+      <a class="nav-btn" href="/auth/logout">Sair</a>
     {% else %}
-    <a class="nav-btn" href="/login">Entrar</a>
+      <a class="nav-btn" href="/login">Entrar</a>
     {% endif %}
   </div>
 </nav>
 
 <div class="wrap">
   <div class="breadcrumb">
-    <a href="/">Início</a><span>›</span><span style="color:var(--gray7)">Meu Carrinho</span>
+    <a href="/">Início</a><span>›</span><span style="color:var(--gray7);font-weight:500">Meu Carrinho</span>
   </div>
 
   <div class="page-title">
     Meu Carrinho
-    <span id="item-count-title">({{ itens|length }} {{ 'item' if itens|length == 1 else 'itens' }})</span>
+    <span class="page-title-count" id="item-count-title">{{ itens|length }} {{ 'item' if itens|length == 1 else 'itens' }}</span>
   </div>
 
+  {% if itens %}
+  <div class="ship-progress">
+    <div class="ship-progress-icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+    </div>
+    <div class="ship-progress-text">
+      <div class="ship-progress-title">🎉 Você desbloqueou frete grátis!</div>
+      <div class="ship-progress-bar"><div class="ship-progress-fill"></div></div>
+    </div>
+  </div>
+
+  <div class="countdown-mini">
+    <span class="countdown-mini-icon">⏰</span>
+    <div class="countdown-mini-text">
+      <strong>Promoção termina em</strong>
+      Garanta seus itens antes que o preço suba.
+    </div>
+    <div class="countdown-mini-timer">
+      <div class="cd-mini" id="cdMH">00</div>
+      <div class="cd-mini" id="cdMM">00</div>
+      <div class="cd-mini" id="cdMS">00</div>
+    </div>
+  </div>
+  {% endif %}
+
   <div class="grid">
-    <!-- ITEMS -->
     <div>
       <div class="cart-card" id="cart-card">
         {% if itens %}
         <div class="cart-header">
-          <span class="cart-header-title">Produtos ({{ itens|length }})</span>
-          <label class="select-all"><input type="checkbox" id="checkAll" checked onchange="toggleAll(this)"/> Selecionar tudo</label>
+          <span class="cart-header-title">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+            Produtos no carrinho
+          </span>
+          <span class="cart-header-watching" id="watching">{{ 12 }} pessoas vendo</span>
         </div>
 
         {% for item in itens %}
         <div class="cart-item" id="item-{{ item.id }}">
-          <div class="item-check">
-            <input type="checkbox" class="item-checkbox" data-id="{{ item.id }}" checked onchange="updateTotals()"/>
-          </div>
           <div class="item-img" onclick="window.location.href='/'">
-            <svg viewBox="0 0 80 80" fill="none">
-              <ellipse cx="40" cy="40" rx="30" ry="8" fill="#dc2626"/>
-              <rect x="10" y="32" width="60" height="20" rx="10" fill="#ef4444"/>
-              <ellipse cx="40" cy="32" rx="30" ry="8" fill="#fca5a5"/>
-              <rect x="70" y="36" width="8" height="6" rx="3" fill="#111"/>
-            </svg>
+            <img src="{{ produto.imagem }}" alt="{{ item.nome }}"/>
           </div>
           <div class="item-body">
-            <div class="item-name" onclick="window.location.href='/'">Jogo De Panelas Paris 10 Peças Vermelho Tramontina</div>
-            <div class="item-seller">Vendido por <strong onclick="void(0)">Mercado Liquida</strong></div>
+            <div class="item-name" onclick="window.location.href='/'">{{ item.nome }}</div>
+            <div class="item-seller">Vendido e entregue por <strong>Mercado de Ofertas</strong></div>
             <div class="item-badges">
               <span class="item-badge badge-free">Frete Grátis</span>
               <span class="item-badge badge-orig">Original</span>
+              <span class="item-badge badge-fast">Envio rápido</span>
             </div>
             <div class="item-actions">
               <div class="qty-ctrl">
@@ -191,104 +321,209 @@ footer{background:var(--navy);color:#6b7a9c;text-align:center;padding:1rem;font-
                 <button class="qty-b" onclick="changeQty('{{ item.id }}', 1)">+</button>
               </div>
               <button class="item-save" onclick="saveForLater('{{ item.id }}')">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-                Salvar
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+                Salvar para depois
               </button>
               <button class="item-del" onclick="removeItem('{{ item.id }}')">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
                 Remover
               </button>
             </div>
           </div>
           <div class="item-price-col">
-            <div class="item-price-old">R$ {{ "%.2f"|format(71.44 * item.quantidade) }}</div>
-            <div class="item-price" id="price-{{ item.id }}">R$ {{ "%.2f"|format(54.95 * item.quantidade) }}</div>
-            <div class="item-installment">12x de R$ {{ "%.2f"|format(4.58 * item.quantidade) }}</div>
+            <div class="item-price-old">R$ {{ "%.2f"|format(produto.preco_antigo * item.quantidade) }}</div>
+            <div class="item-price" id="price-{{ item.id }}">R$ {{ "%.2f"|format(produto.preco * item.quantidade) }}</div>
+            <div class="item-installment">{{ produto.parcelas }}x R$ {{ "%.2f"|format(produto.parcela_valor * item.quantidade) }} sem juros</div>
+            <span class="item-saving" id="saving-{{ item.id }}">Você economiza R$ {{ "%.2f"|format((produto.preco_antigo - produto.preco) * item.quantidade) }}</span>
           </div>
         </div>
         {% endfor %}
 
         {% else %}
-        <!-- EMPTY STATE -->
         <div class="empty-state">
           <div class="empty-icon">
-            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--gray4)" stroke-width="1.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+            <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" stroke-width="1.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
           </div>
           <div class="empty-title">Seu carrinho está vazio</div>
-          <div class="empty-sub">Adicione produtos para continuar comprando</div>
+          <div class="empty-sub">Que tal aproveitar nossa oferta com frete grátis?</div>
           <a class="btn-continue" href="/">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-            Explorar produtos
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Ver ofertas em destaque
           </a>
         </div>
         {% endif %}
       </div>
-    </div>
 
-    <!-- SUMMARY -->
-    {% if itens %}
-    <div>
-      <div class="summary-card">
-        <div class="summary-title">Resumo do pedido</div>
-
-        <div class="summary-row">
-          <span id="sum-qty-label">Subtotal ({{ itens|length }} item{{ 's' if itens|length > 1 }})</span>
-          <span id="sum-subtotal">R$ {{ "%.2f"|format(itens|sum(attribute='subtotal')) }}</span>
+      {% if itens %}
+      <div class="upsell-card">
+        <div class="upsell-title">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--rose2)" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          Adicione e economize ainda mais
         </div>
-        <div class="summary-row discount">
-          <span>Desconto (23% OFF)</span>
-          <span id="sum-discount">− R$ {{ "%.2f"|format(itens|sum(attribute='desconto')) }}</span>
-        </div>
-        <div class="summary-row">
-          <span>Frete</span>
-          <span style="color:var(--green-text);font-weight:600">Grátis</span>
-        </div>
-        <div class="summary-row total">
-          <span>Total</span>
-          <span id="sum-total">R$ {{ "%.2f"|format(itens|sum(attribute='total')) }}</span>
-        </div>
-
-        <div class="summary-pix">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-          <div>
-            <div>No Pix: <strong id="sum-pix">R$ {{ "%.2f"|format(itens|sum(attribute='total') * 0.95) }}</strong></div>
-            <div style="font-weight:400;font-size:11px">5% de desconto adicional</div>
+        <div class="upsell-row">
+          <div class="upsell-item" onclick="addUpsell('Talheres 24pç', 39.90)">
+            <div class="upsell-img">🍴</div>
+            <div class="upsell-name">Jogo de talheres 24 peças aço inox</div>
+            <div class="upsell-price">R$ 39,90<small>R$ 59,90</small></div>
+            <button class="upsell-btn">+ Adicionar</button>
+          </div>
+          <div class="upsell-item" onclick="addUpsell('Utensílios silicone', 29.90)">
+            <div class="upsell-img">🥄</div>
+            <div class="upsell-name">Kit utensílios silicone 6 peças</div>
+            <div class="upsell-price">R$ 29,90<small>R$ 49,90</small></div>
+            <button class="upsell-btn">+ Adicionar</button>
+          </div>
+          <div class="upsell-item" onclick="addUpsell('Forma de bolo', 24.90)">
+            <div class="upsell-img">🥧</div>
+            <div class="upsell-name">Forma de bolo antiaderente 24cm</div>
+            <div class="upsell-price">R$ 24,90<small>R$ 39,90</small></div>
+            <button class="upsell-btn">+ Adicionar</button>
+          </div>
+          <div class="upsell-item" onclick="addUpsell('Tábua de corte', 19.90)">
+            <div class="upsell-img">🥖</div>
+            <div class="upsell-name">Tábua de corte madeira premium</div>
+            <div class="upsell-price">R$ 19,90<small>R$ 34,90</small></div>
+            <button class="upsell-btn">+ Adicionar</button>
           </div>
         </div>
+      </div>
+      {% endif %}
+    </div>
 
-        <!-- CUPOM -->
-        <div class="coupon-row">
-          <input class="coupon-input" type="text" placeholder="Código do cupom" id="coupon-input"/>
-          <button class="coupon-btn" onclick="applyCoupon()">Aplicar</button>
+    {% if itens %}
+    <div>
+      <div class="summary-wrap">
+        <div class="summary-card">
+          <div class="summary-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gray7)" stroke-width="2"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M8 14h2"/></svg>
+            Resumo do pedido
+          </div>
+
+          <div class="summary-row">
+            <span id="sum-qty-label">Subtotal ({{ itens|sum(attribute='quantidade') }} item{{ 's' if itens|sum(attribute='quantidade') > 1 }})</span>
+            <span id="sum-subtotal">R$ {{ "%.2f"|format(itens|sum(attribute='subtotal')) }}</span>
+          </div>
+          <div class="summary-row discount">
+            <span>Desconto promocional</span>
+            <span id="sum-discount">− R$ {{ "%.2f"|format(itens|sum(attribute='desconto')) }}</span>
+          </div>
+          <div class="summary-row">
+            <span>Frete</span>
+            <span style="color:var(--green-text);font-weight:700">Grátis 🚚</span>
+          </div>
+          <div class="summary-row" id="sum-coupon-row" style="display:none">
+            <span>Cupom <span id="sum-coupon-name"></span></span>
+            <span id="sum-coupon-val" style="color:var(--green-text);font-weight:700"></span>
+          </div>
+          <div class="summary-row total">
+            <span>Total</span>
+            <span id="sum-total">R$ {{ "%.2f"|format(itens|sum(attribute='total')) }}</span>
+          </div>
+
+          <div class="summary-saved">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+            Você está economizando <strong id="sum-saved-val">R$ {{ "%.2f"|format(itens|sum(attribute='desconto')) }}</strong>
+          </div>
+
+          <div class="summary-pix">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            <div>
+              No Pix: <strong id="sum-pix">R$ {{ "%.2f"|format(itens|sum(attribute='total') * 0.95) }}</strong>
+              <small>5% OFF adicional · aprovação imediata</small>
+            </div>
+          </div>
+
+          <div id="coupon-applied-box"></div>
+
+          <div class="coupon-row">
+            <input class="coupon-input" type="text" placeholder="Código do cupom" id="coupon-input" autocomplete="off"/>
+            <button class="coupon-btn" onclick="applyCoupon()">Aplicar</button>
+          </div>
+          <div class="coupon-suggestions">
+            <span class="coupon-chip" onclick="useCoupon('DESCONTO10')">DESCONTO10 · 10% OFF</span>
+            <span class="coupon-chip" onclick="useCoupon('FRETE5')">FRETE5 · R$5 OFF</span>
+          </div>
+
+          <button class="btn-checkout" id="btn-checkout" onclick="goCheckout()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            Finalizar compra com segurança
+          </button>
+
+          <div class="mini-guarantees">
+            <div class="mini-g">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span><strong>Compra 100% garantida</strong></span>
+            </div>
+            <div class="mini-g">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              <span><strong>Pagamento criptografado</strong> · SSL 256-bit</span>
+            </div>
+            <div class="mini-g">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M1 4v6h6"/><path d="M23 20v-6h-6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10M23 14l-4.64 4.36A9 9 0 013.51 15"/></svg>
+              <span><strong>Devolução grátis</strong> em 30 dias</span>
+            </div>
+          </div>
+
+          <div class="payment-summary">
+            <div class="payment-label">Pague como preferir</div>
+            <div class="payment-icons">
+              <span class="pay-icon pix">PIX</span>
+              <span class="pay-icon visa">VISA</span>
+              <span class="pay-icon master">MASTER</span>
+              <span class="pay-icon amex">AMEX</span>
+              <span class="pay-icon elo">ELO</span>
+            </div>
+          </div>
+
+          <a class="continue-link" href="/">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Continuar comprando
+          </a>
         </div>
-
-        <button class="btn-checkout" id="btn-checkout" onclick="goCheckout()">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-          Finalizar compra
-        </button>
-
-        <div class="mini-guarantees">
-          <div class="mini-g"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Compra 100% garantida</div>
-          <div class="mini-g"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>Pagamento criptografado</div>
-          <div class="mini-g"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M1 4v6h6"/><path d="M23 20v-6h-6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10M23 14l-4.64 4.36A9 9 0 013.51 15"/></svg>Devolução grátis em 30 dias</div>
-        </div>
-
-        <a class="continue-link" href="/">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-          Continuar comprando
-        </a>
       </div>
     </div>
     {% endif %}
   </div>
 </div>
 
-<footer>© 2025 Mercado Liquida – Todos os direitos reservados</footer>
+{% if itens %}
+<div class="sticky-checkout">
+  <div class="sticky-checkout-info">
+    <div class="sticky-checkout-label">Total</div>
+    <div class="sticky-checkout-total" id="sticky-total">R$ {{ "%.2f"|format(itens|sum(attribute='total')) }}</div>
+  </div>
+  <button class="sticky-checkout-btn" onclick="goCheckout()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+    Finalizar
+  </button>
+</div>
+{% endif %}
+
+<footer>
+  <p style="font-size:14px;font-weight:600;color:#e5e7eb;margin-bottom:6px">Mercado de Ofertas</p>
+  <p>© 2026 mercadosdeofertas.shop – Todos os direitos reservados</p>
+  <p style="margin-top:4px">Atendimento online • Compra segura • Frete grátis para todo o Brasil</p>
+</footer>
 
 <script>
-const PRICE = 54.95, PRICE_OLD = 71.44, PRICE_INST = 4.58;
+const PRICE = {{ produto.preco }};
+const PRICE_OLD = {{ produto.preco_antigo }};
+const PRICE_INST = {{ produto.parcela_valor }};
+const INSTALLMENTS = {{ produto.parcelas }};
+const PIX_PCT = {{ produto.pix_desconto }};
 
-// ── localStorage guest cart ─────────────────────
+let toastTimer;
+function showToast(msg) {
+  document.getElementById('toast-msg').textContent = msg;
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+function fmt(n){return n.toFixed(2).replace('.',',')}
+
+/* ── localStorage guest cart helpers ─────────────────── */
 function getLocalCart() {
   try { return JSON.parse(localStorage.getItem('ml_cart') || '[]'); } catch { return []; }
 }
@@ -302,122 +537,52 @@ function updateLocalCart(id, newQty) {
   localStorage.setItem('ml_cart', JSON.stringify(cart));
 }
 
-function itemHTML(item, idx) {
-  const id  = item.id || idx;
-  const qty = item.quantidade || 1;
-  return `
-  <div class="cart-item" id="item-${id}">
-    <div class="item-check"><input type="checkbox" class="item-checkbox" data-id="${id}" checked onchange="updateTotals()"/></div>
-    <div class="item-img" onclick="location.href='/'">
-      <svg viewBox="0 0 80 80" fill="none"><ellipse cx="40" cy="40" rx="30" ry="8" fill="#dc2626"/><rect x="10" y="32" width="60" height="20" rx="10" fill="#ef4444"/><ellipse cx="40" cy="32" rx="30" ry="8" fill="#fca5a5"/><rect x="70" y="36" width="8" height="6" rx="3" fill="#111"/></svg>
-    </div>
-    <div class="item-body">
-      <div class="item-name" onclick="location.href='/'">Jogo De Panelas Paris 10 Peças Vermelho Tramontina</div>
-      <div class="item-seller">Vendido por <strong>Mercado Liquida</strong></div>
-      <div class="item-badges">
-        <span class="item-badge badge-free">Frete Grátis</span>
-        <span class="item-badge badge-orig">Original</span>
-      </div>
-      <div class="item-actions">
-        <div class="qty-ctrl">
-          <button class="qty-b" onclick="changeQty('${id}',-1)" ${qty<=1?'disabled':''}>−</button>
-          <input class="qty-n" type="text" value="${qty}" id="qty-${id}" readonly/>
-          <button class="qty-b" onclick="changeQty('${id}',1)">+</button>
-        </div>
-        <button class="item-save" onclick="showToast('Item salvo nos favoritos ❤️')">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-          Salvar
-        </button>
-        <button class="item-del" onclick="removeItem('${id}')">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
-          Remover
-        </button>
-      </div>
-    </div>
-    <div class="item-price-col">
-      <div class="item-price-old">R$ ${(PRICE_OLD*qty).toFixed(2).replace('.',',')}</div>
-      <div class="item-price" id="price-${id}">R$ ${(PRICE*qty).toFixed(2).replace('.',',')}</div>
-      <div class="item-installment">12x de R$ ${(PRICE_INST*qty).toFixed(2).replace('.',',')}</div>
-    </div>
+/* ── Coupon state ────────────────────────────────────── */
+let activeCoupon = null;
+const COUPONS = {
+  'DESCONTO10': {label:'DESCONTO10', type:'pct', value:10, msg:'10% de desconto'},
+  'FRETE5':     {label:'FRETE5',     type:'fixed', value:5,  msg:'R$ 5,00 de desconto'},
+  'PIXFAN':     {label:'PIXFAN',     type:'pct', value:7,  msg:'7% de desconto extra'}
+};
+
+function useCoupon(code){
+  document.getElementById('coupon-input').value = code;
+  applyCoupon();
+}
+
+function applyCoupon() {
+  const v = document.getElementById('coupon-input').value.trim().toUpperCase();
+  if(!v){showToast('Digite um código de cupom.');return}
+  const c = COUPONS[v];
+  if(!c){showToast('Cupom inválido ou expirado.');return}
+  activeCoupon = c;
+  document.getElementById('coupon-input').value = '';
+  renderAppliedCoupon();
+  updateTotals();
+  showToast('Cupom ' + c.label + ' aplicado: ' + c.msg + '.');
+}
+
+function renderAppliedCoupon(){
+  const box = document.getElementById('coupon-applied-box');
+  if(!activeCoupon){box.innerHTML='';return}
+  box.innerHTML = `<div class="coupon-applied">
+    <span>✓ Cupom <strong>${activeCoupon.label}</strong> ativo</span>
+    <button onclick="removeCoupon()" title="Remover">×</button>
   </div>`;
 }
+function removeCoupon(){activeCoupon=null;renderAppliedCoupon();updateTotals();showToast('Cupom removido.')}
 
-function summaryHTML(itens) {
-  const qty_total = itens.reduce((s,i)=>s+i.quantidade,0);
-  const total = qty_total * PRICE;
-  const subtotal = qty_total * PRICE_OLD;
-  const desconto = subtotal - total;
-  const pix = total * 0.95;
-  return `
-    <div class="summary-card">
-      <div class="summary-title">Resumo do pedido</div>
-      <div class="summary-row"><span id="sum-qty-label">Subtotal (${qty_total} item${qty_total>1?'s':''})</span><span id="sum-subtotal">R$ ${subtotal.toFixed(2).replace('.',',')}</span></div>
-      <div class="summary-row discount"><span>Desconto (23% OFF)</span><span id="sum-discount">− R$ ${desconto.toFixed(2).replace('.',',')}</span></div>
-      <div class="summary-row"><span>Frete</span><span style="color:var(--green-text);font-weight:600">Grátis</span></div>
-      <div class="summary-row total"><span>Total</span><span id="sum-total">R$ ${total.toFixed(2).replace('.',',')}</span></div>
-      <div class="summary-pix">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-        <div>No Pix: <strong id="sum-pix">R$ ${pix.toFixed(2).replace('.',',')}</strong><div style="font-weight:400;font-size:11px">5% de desconto adicional</div></div>
-      </div>
-      <div class="coupon-row"><input class="coupon-input" type="text" placeholder="Código do cupom" id="coupon-input"/><button class="coupon-btn" onclick="applyCoupon()">Aplicar</button></div>
-      <button class="btn-checkout" id="btn-checkout" onclick="goCheckout()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-        Finalizar compra
-      </button>
-      <div class="mini-guarantees">
-        <div class="mini-g"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Compra 100% garantida</div>
-        <div class="mini-g"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>Pagamento criptografado</div>
-        <div class="mini-g"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M1 4v6h6"/><path d="M23 20v-6h-6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10M23 14l-4.64 4.36A9 9 0 013.51 15"/></svg>Devolução grátis em 30 dias</div>
-      </div>
-      <a class="continue-link" href="/"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Continuar comprando</a>
-    </div>`;
-}
-
-// Renderiza carrinho do localStorage se o servidor não retornou itens
-(function initGuestCart() {
-  const serverHasItems = document.querySelectorAll('.cart-item').length > 0;
-  if (serverHasItems) { updateTotals(); return; }
-
-  const cart = getLocalCart();
-  if (cart.length === 0) return;
-
-  const card = document.getElementById('cart-card');
-  card.innerHTML = `
-    <div class="cart-header">
-      <span class="cart-header-title">Produtos (${cart.length})</span>
-      <label class="select-all"><input type="checkbox" id="checkAll" checked onchange="toggleAll(this)"/> Selecionar tudo</label>
-    </div>
-    ${cart.map((item, i) => itemHTML(item, i)).join('')}`;
-
-  // Renderiza resumo
-  const grid = document.querySelector('.grid');
-  if (grid && !document.querySelector('.summary-card')) {
-    const summaryDiv = document.createElement('div');
-    summaryDiv.innerHTML = summaryHTML(cart);
-    grid.appendChild(summaryDiv);
-  }
-
-  document.getElementById('item-count-title').textContent =
-    `(${cart.reduce((s,i)=>s+i.quantidade,0)} itens)`;
-})();
-
-let toastTimer;
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
-}
-
+/* ── Quantity ───────────────────────────────────────── */
 async function changeQty(id, delta) {
   const input = document.getElementById('qty-' + id);
   const minusBtn = input.previousElementSibling;
-  let qty = parseInt(input.value) + delta;
+  let qty = parseInt(input.value, 10) + delta;
   if(qty < 1) return;
   input.value = qty;
   minusBtn.disabled = qty <= 1;
-  document.getElementById('price-' + id).textContent = 'R$ ' + (PRICE * qty).toFixed(2).replace('.', ',');
+  document.getElementById('price-' + id).textContent = 'R$ ' + fmt(PRICE * qty);
+  const sav = document.getElementById('saving-' + id);
+  if(sav) sav.textContent = 'Você economiza R$ ' + fmt((PRICE_OLD - PRICE) * qty);
   updateLocalCart(id, qty);
   updateTotals();
   try {
@@ -430,14 +595,12 @@ async function changeQty(id, delta) {
 
 async function removeItem(id) {
   const el = document.getElementById('item-' + id);
-  el.style.opacity = '0';
-  el.style.transform = 'translateX(20px)';
-  el.style.transition = 'opacity .3s, transform .3s';
+  el.classList.add('removing');
   setTimeout(async () => {
     el.remove();
     updateLocalCart(id, 0);
     updateTotals();
-    showToast('Item removido do carrinho');
+    showToast('Item removido do carrinho.');
     checkEmpty();
     try {
       await fetch('/carrinho/remover', {
@@ -445,64 +608,136 @@ async function removeItem(id) {
         body: JSON.stringify({item_id: id})
       });
     } catch(_) {}
-  }, 300);
+  }, 350);
 }
 
 function saveForLater(id) {
-  showToast('Item salvo nos favoritos ❤️');
+  showToast('Item salvo nos favoritos para depois.');
 }
 
-function toggleAll(cb) {
-  document.querySelectorAll('.item-checkbox').forEach(c => { c.checked = cb.checked; });
-  updateTotals();
-}
-
+/* ── Totals ─────────────────────────────────────────── */
 function updateTotals() {
-  let total = 0, qty_total = 0;
-  document.querySelectorAll('.item-checkbox:checked').forEach(cb => {
-    const id = cb.dataset.id;
-    const qty = parseInt(document.getElementById('qty-' + id).value);
-    total += PRICE * qty;
-    qty_total += qty;
+  let qty_total = 0;
+  document.querySelectorAll('.qty-n').forEach(input => {
+    qty_total += parseInt(input.value, 10) || 0;
   });
-  const desconto = qty_total * (PRICE_OLD - PRICE);
   const subtotal = qty_total * PRICE_OLD;
-  const pix = total * 0.95;
-  document.getElementById('sum-subtotal').textContent = 'R$ ' + subtotal.toFixed(2).replace('.', ',');
-  document.getElementById('sum-discount').textContent = '− R$ ' + desconto.toFixed(2).replace('.', ',');
-  document.getElementById('sum-total').textContent = 'R$ ' + total.toFixed(2).replace('.', ',');
-  document.getElementById('sum-pix').textContent = 'R$ ' + pix.toFixed(2).replace('.', ',');
+  let total = qty_total * PRICE;
+  const desconto = subtotal - total;
+  let couponDiscount = 0;
+  if(activeCoupon){
+    if(activeCoupon.type === 'pct') couponDiscount = total * (activeCoupon.value/100);
+    else couponDiscount = Math.min(activeCoupon.value, total);
+    total = Math.max(0, total - couponDiscount);
+  }
+  const pix = total * ((100 - PIX_PCT)/100);
+
+  const setText = (id, txt) => {const el=document.getElementById(id);if(el) el.textContent=txt};
+  setText('sum-subtotal', 'R$ ' + fmt(subtotal));
+  setText('sum-discount', '− R$ ' + fmt(desconto));
+  setText('sum-total',    'R$ ' + fmt(total));
+  setText('sticky-total', 'R$ ' + fmt(total));
+  setText('sum-pix',      'R$ ' + fmt(pix));
+  setText('sum-saved-val','R$ ' + fmt(desconto + couponDiscount));
+
+  const couponRow = document.getElementById('sum-coupon-row');
+  if(couponRow){
+    if(activeCoupon){
+      couponRow.style.display = 'flex';
+      document.getElementById('sum-coupon-name').textContent = activeCoupon.label;
+      document.getElementById('sum-coupon-val').textContent = '− R$ ' + fmt(couponDiscount);
+    } else couponRow.style.display = 'none';
+  }
+
   const label = qty_total === 1 ? '1 item' : qty_total + ' itens';
-  const el = document.getElementById('sum-qty-label');
-  if(el) el.textContent = 'Subtotal (' + label + ')';
-  const btnCh = document.getElementById('btn-checkout');
-  if(btnCh) btnCh.disabled = qty_total === 0;
+  setText('sum-qty-label', 'Subtotal (' + label + ')');
+  setText('item-count-title', label);
+
+  const btn = document.getElementById('btn-checkout');
+  if(btn) btn.disabled = qty_total === 0;
 }
 
 function checkEmpty() {
   if(document.querySelectorAll('.cart-item').length === 0) {
     document.getElementById('cart-card').innerHTML = `
       <div class="empty-state">
-        <div class="empty-icon"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--gray4)" stroke-width="1.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg></div>
-        <div class="empty-title">Seu carrinho está vazio</div>
-        <div class="empty-sub">Você removeu todos os itens</div>
-        <a class="btn-continue" href="/">← Continuar comprando</a>
+        <div class="empty-icon">
+          <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" stroke-width="1.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+        </div>
+        <div class="empty-title">Seu carrinho ficou vazio</div>
+        <div class="empty-sub">Você removeu todos os itens. Que tal voltar e dar uma olhada?</div>
+        <a class="btn-continue" href="/">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Voltar às ofertas
+        </a>
       </div>`;
+    const summary = document.querySelector('.summary-wrap');
+    if(summary) summary.style.display = 'none';
+    const sticky = document.querySelector('.sticky-checkout');
+    if(sticky) sticky.style.display = 'none';
+    const upsell = document.querySelector('.upsell-card');
+    if(upsell) upsell.style.display = 'none';
+    const ship = document.querySelector('.ship-progress');
+    if(ship) ship.style.display = 'none';
+    const cdm = document.querySelector('.countdown-mini');
+    if(cdm) cdm.style.display = 'none';
   }
 }
 
-function applyCoupon() {
-  const v = document.getElementById('coupon-input').value.trim().toUpperCase();
-  if(v === 'DESCONTO10') showToast('✅ Cupom DESCONTO10 aplicado — 10% OFF!');
-  else if(v === '') showToast('⚠️ Digite um código de cupom');
-  else showToast('❌ Cupom inválido ou expirado');
+function goCheckout() {
+  const btn = document.getElementById('btn-checkout');
+  if(btn) btn.disabled = true;
+  showToast('Indo para o checkout seguro...');
+  setTimeout(()=>window.location.href='/checkout', 600);
 }
 
-function goCheckout() {
-  const checados = document.querySelectorAll('.item-checkbox:checked');
-  if(checados.length === 0) { showToast('⚠️ Selecione ao menos um item'); return; }
-  window.location.href = '/checkout';
+/* ── Upsell ─────────────────────────────────────────── */
+function addUpsell(name, price){
+  showToast(name + ' adicionado ao carrinho! Disponível no próximo checkout.');
 }
+
+/* ── Watching counter ───────────────────────────────── */
+(function(){
+  const el = document.getElementById('watching');
+  if(!el) return;
+  let n = 8 + Math.floor(Math.random()*9);
+  function render(){el.textContent = n + ' pessoas vendo este carrinho'}
+  render();
+  setInterval(()=>{n=Math.max(4,Math.min(22,n+(Math.random()<.5?-1:1)));render()}, 5500);
+})();
+
+/* ── Countdown synced with product page ─────────────── */
+(function(){
+  const cdH = document.getElementById('cdMH');
+  if(!cdH) return;
+  let endTime = parseInt(localStorage.getItem('offer_end') || '0', 10);
+  const now = Date.now();
+  if(!endTime || endTime < now){
+    endTime = now + (4*3600 + 27*60 + 13)*1000;
+    localStorage.setItem('offer_end', String(endTime));
+  }
+  function pad(n){return String(n).padStart(2,'0')}
+  function tick(){
+    const left = Math.max(0, Math.floor((endTime - Date.now())/1000));
+    document.getElementById('cdMH').textContent = pad(Math.floor(left/3600));
+    document.getElementById('cdMM').textContent = pad(Math.floor((left%3600)/60));
+    document.getElementById('cdMS').textContent = pad(left%60);
+    if(left<=0){localStorage.removeItem('offer_end');setTimeout(()=>location.reload(),1000)}
+  }
+  tick();setInterval(tick,1000);
+})();
+
+/* ── Hydrate guest cart from localStorage if server returned no items ── */
+(function() {
+  const serverHasItems = document.querySelectorAll('.cart-item').length > 0;
+  if (serverHasItems) { updateTotals(); return; }
+  // For guest users with localStorage cart, show a hint to log in
+  const cart = getLocalCart();
+  if (cart.length > 0) {
+    showToast('Faça login para ver seu carrinho salvo no servidor.');
+  }
+})();
 </script>
+<script src="/static/visitor-tracker.js"></script>
 </body>
 </html>

@@ -23,13 +23,18 @@ GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", "")
 GOOGLE_REDIRECT_URI  = os.environ.get("GOOGLE_REDIRECT_URI", "http://localhost:5000/auth/google/callback")
 
 PRODUTO = {
-    "id":          "panelas-paris-10",
-    "nome":        "Jogo De Panelas Paris 10 Peças Vermelho Tramontina",
-    "preco":       54.95,
+    "id": "panelas-paris-10",
+    "nome": "Jogo De Panelas Paris 10 Peças Vermelho Tramontina",
+    "preco": 54.95,
     "preco_antigo": 71.44,
-    "desconto":    "23% OFF",
-    "parcelas":    12,
+    "desconto": "23% OFF",
+    "parcelas": 12,
     "parcela_valor": 4.58,
+    "imagem": "/static/panela.webp",
+    "marca": "Tramontina",
+    "entrega": "Entrega entre 3 e 5 dias úteis",
+    "pix_desconto": 5,
+    "estoque": 7,
 }
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -84,14 +89,20 @@ def index():
 def login_page():
     if usuario_logado():
         return redirect("/")
-    return render_template("login.html", error=request.args.get("error"), success=request.args.get("success"))
+    return render_template(
+        "login.html",
+        error=request.args.get("error"),
+        success=request.args.get("success"),
+        produto=PRODUTO,
+        next_url=request.args.get("next", "/")
+    )
 
 
 @app.route("/carrinho")
 def carrinho_page():
     u = usuario_logado()
     itens = listar_carrinho(u["id"]) if u else []
-    return render_template("carrinho.html", usuario=u, itens=itens)
+    return render_template("carrinho.html", usuario=u, itens=itens, produto=PRODUTO)
 
 
 @app.route("/checkout", methods=["GET", "POST"])
@@ -99,7 +110,7 @@ def checkout():
     u = usuario_logado()
     quantidade = request.args.get("qtd", 1, type=int)
     if request.method == "GET":
-        return render_template("checkout.html", produto=PRODUTO, quantidade=quantidade)
+        return render_template("checkout.html", produto=PRODUTO, quantidade=quantidade, usuario=u)
 
     nome      = request.form.get("nome", "").strip()
     email     = request.form.get("email", "").strip()
@@ -108,8 +119,13 @@ def checkout():
     quantidade = request.form.get("quantidade", 1, type=int)
 
     if not nome or not email:
-        return render_template("checkout.html", produto=PRODUTO, quantidade=quantidade,
-                               erro="Preencha pelo menos nome e e-mail.")
+        return render_template(
+            "checkout.html",
+            produto=PRODUTO,
+            quantidade=quantidade,
+            usuario=u,
+            erro="Preencha pelo menos nome e e-mail."
+        )
 
     pedido_id = str(uuid.uuid4())[:8].upper()
     total = round(PRODUTO["preco"] * quantidade, 2)

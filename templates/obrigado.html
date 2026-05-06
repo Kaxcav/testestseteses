@@ -1,80 +1,430 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Pedido confirmado – Mercado Liquida</title>
-  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-  <style>
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:'Lexend',sans-serif;background:#f0f0f0;min-height:100vh;display:flex;flex-direction:column}
-    .nav{background:#1a2744;color:#fff;padding:0 2rem;height:54px;display:flex;align-items:center;gap:8px}
-    .nav-logo{font-size:16px;font-weight:600;display:flex;align-items:center;gap:8px}
-    .nav-logo-icon{width:26px;height:26px;background:#fff;border-radius:5px;display:flex;align-items:center;justify-content:center}
-    .center{flex:1;display:flex;align-items:center;justify-content:center;padding:2rem}
-    .card{background:#fff;border-radius:14px;padding:2.5rem 2rem;max-width:480px;width:100%;text-align:center}
-    .check{width:72px;height:72px;background:#f0fdf4;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.2rem}
-    h1{font-size:22px;font-weight:700;color:#1a2744;margin-bottom:8px}
-    .sub{font-size:14px;color:#666;line-height:1.6;margin-bottom:20px}
-    .pedido-id{background:#f8f8f8;border-radius:7px;padding:10px 16px;font-size:13px;color:#555;margin-bottom:20px}
-    .pedido-id strong{color:#1a2744;font-size:15px;display:block;margin-top:4px}
-    .steps{text-align:left;border-top:1px solid #eee;padding-top:16px;display:flex;flex-direction:column;gap:12px}
-    .step{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#444}
-    .step-num{width:22px;height:22px;border-radius:50%;background:#1a2744;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
-    .btn-home{display:inline-block;margin-top:20px;padding:12px 28px;background:#1a2744;color:#fff;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600;transition:background .2s}
-    .btn-home:hover{background:#243560}
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Pedido confirmado – Mercado de Ofertas</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --navy:#1a2744;--navy2:#243a7a;
+  --rose:#c0586a;--rose2:#8b1a3a;--rose-light:#fdf0f2;--rose-border:#f3c7cf;
+  --green:#16a34a;--green-light:#dcfce7;--green-text:#15803d;
+  --yellow:#f59e0b;--orange:#ea580c;
+  --gray1:#f8f9fa;--gray2:#f0f0f0;--gray3:#e5e7eb;--gray4:#d1d5db;
+  --gray5:#9ca3af;--gray6:#6b7280;--gray7:#374151;--gray8:#1f2937;
+  --radius:10px;--radius-lg:14px;--radius-xl:20px;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.08);
+  --shadow:0 8px 24px rgba(0,0,0,.07),0 2px 6px rgba(0,0,0,.04);
+  --shadow-lg:0 20px 48px rgba(0,0,0,.12),0 4px 16px rgba(0,0,0,.05);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:#f5f5f7;color:var(--gray8);-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+button{font-family:'Inter',sans-serif;cursor:pointer}
+img{display:block}
+
+@keyframes pulseDot{0%{box-shadow:0 0 0 0 rgba(34,197,94,.55)}70%{box-shadow:0 0 0 9px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
+@keyframes shimmer{0%{background-position:-1000px 0}100%{background-position:1000px 0}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes scaleIn{0%{transform:scale(0)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
+@keyframes drawCheck{from{stroke-dashoffset:60}to{stroke-dashoffset:0}}
+@keyframes drawCircle{from{stroke-dashoffset:300}to{stroke-dashoffset:0}}
+@keyframes confettiFall{
+  0%{transform:translateY(-40px) rotate(0deg);opacity:1}
+  100%{transform:translateY(100vh) rotate(720deg);opacity:0}
+}
+@keyframes ringPulse{0%{transform:scale(.8);opacity:.8}100%{transform:scale(2.5);opacity:0}}
+@keyframes wave{0%,100%{transform:rotate(0deg)}25%{transform:rotate(20deg)}75%{transform:rotate(-15deg)}}
+
+/* TOAST */
+.toast{position:fixed;top:18px;right:18px;background:#111827;color:#fff;padding:13px 18px;border-radius:var(--radius);font-size:14px;font-weight:500;display:flex;align-items:center;gap:10px;z-index:9999;transform:translateX(130%);transition:transform .35s cubic-bezier(.34,1.56,.64,1);box-shadow:var(--shadow-lg);max-width:340px}
+.toast.show{transform:translateX(0)}
+.toast-dot{width:8px;height:8px;border-radius:50%;background:#4ade80;flex-shrink:0;animation:pulseDot 1.6s infinite}
+
+/* TOPBAR */
+.topbar{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 50%,var(--navy) 100%);background-size:200% 100%;animation:shimmer 8s linear infinite;color:#fff;padding:9px 1.5rem;text-align:center;font-size:13px;font-weight:500;display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap}
+.topbar strong{color:#fef08a}
+.topbar-item{display:inline-flex;align-items:center;gap:6px}
+.topbar-sep{opacity:.4}
+@media(max-width:600px){.topbar-item:not(:first-child){display:none}}
+
+/* NAV */
+.nav{background:#fff;height:68px;display:flex;align-items:center;padding:0 1.5rem;gap:12px;box-shadow:0 1px 0 var(--gray3),0 8px 24px rgba(0,0,0,.05);z-index:50;position:sticky;top:0}
+.nav-logo{display:flex;align-items:center;gap:10px;color:var(--gray8);font-size:18px;font-weight:800;letter-spacing:-.3px}
+.nav-logo-box{width:36px;height:36px;background:linear-gradient(135deg,var(--rose),var(--rose2));border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(192,88,106,.35);transition:transform .25s}
+.nav-logo:hover .nav-logo-box{transform:rotate(-6deg) scale(1.05)}
+.nav-secure{margin-left:auto;display:flex;align-items:center;gap:6px;font-size:12px;color:var(--green-text);font-weight:700;background:var(--green-light);padding:6px 12px;border-radius:100px;border:1px solid #bbf7d0}
+.nav-secure::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulseDot 1.6s infinite}
+
+/* CONFETTI */
+.confetti-wrap{position:fixed;inset:0;pointer-events:none;z-index:9000;overflow:hidden}
+.confetti{position:absolute;top:-30px;width:8px;height:14px;border-radius:2px;animation:confettiFall linear forwards}
+
+/* MAIN */
+.main{flex:1;padding:2.5rem 1rem 3rem;display:flex;justify-content:center}
+.shell{max-width:680px;width:100%;display:flex;flex-direction:column;gap:1rem}
+
+/* HERO CARD */
+.hero{background:#fff;border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);padding:2.5rem 2rem 2rem;text-align:center;overflow:hidden;position:relative;animation:fadeUp .5s}
+.hero::before{content:"";position:absolute;top:0;left:0;right:0;height:6px;background:linear-gradient(90deg,#22c55e,#16a34a,#22c55e);background-size:200% 100%;animation:shimmer 3s linear infinite}
+
+.check-wrap{position:relative;width:96px;height:96px;margin:0 auto 1.4rem}
+.check-ring{position:absolute;inset:0;border-radius:50%;border:3px solid var(--green);opacity:0;animation:ringPulse 1.6s ease-out infinite}
+.check-ring:nth-child(2){animation-delay:.5s}
+.check-circle{position:relative;width:96px;height:96px;background:linear-gradient(135deg,#dcfce7,#fff);border-radius:50%;display:flex;align-items:center;justify-content:center;animation:scaleIn .55s cubic-bezier(.34,1.56,.64,1);border:2px solid #bbf7d0;box-shadow:0 12px 32px rgba(34,197,94,.25)}
+.check-svg{width:48px;height:48px}
+.check-svg circle{fill:none;stroke:var(--green);stroke-width:2;stroke-dasharray:300;stroke-dashoffset:300;animation:drawCircle .8s .2s forwards}
+.check-svg path{fill:none;stroke:var(--green);stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:60;stroke-dashoffset:60;animation:drawCheck .5s .9s forwards}
+
+.hero-title{font-size:28px;font-weight:800;color:var(--gray8);margin-bottom:8px;letter-spacing:-.7px;animation:fadeUp .5s .15s both}
+.hero-title .wave-emoji{display:inline-block;animation:wave 1.2s 1.5s 2}
+.hero-sub{font-size:15px;color:var(--gray6);line-height:1.6;margin-bottom:1.4rem;max-width:480px;margin-left:auto;margin-right:auto;animation:fadeUp .5s .25s both}
+.hero-sub strong{color:var(--gray8);font-weight:700}
+
+/* ORDER ID */
+.order-card{background:linear-gradient(135deg,#fff7f8 0%,#fff 100%);border:1.5px dashed var(--rose-border);border-radius:var(--radius-lg);padding:18px;margin:0 auto 1.4rem;max-width:380px;animation:fadeUp .5s .35s both}
+.order-card-label{font-size:11.5px;color:var(--gray6);font-weight:600;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px}
+.order-card-id{font-size:24px;font-weight:800;color:var(--rose2);letter-spacing:1px;margin-bottom:10px;font-variant-numeric:tabular-nums}
+.copy-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;background:#fff;border:1.5px solid var(--rose-border);color:var(--rose2);border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
+.copy-btn:hover{background:var(--rose-light);transform:translateY(-1px)}
+.copy-btn.copied{background:var(--green-light);border-color:#bbf7d0;color:var(--green-text)}
+
+/* CTA ROW */
+.cta-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:6px;animation:fadeUp .5s .45s both}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:var(--radius);font-size:14px;font-weight:700;cursor:pointer;border:none;transition:transform .15s,box-shadow .15s;text-decoration:none}
+.btn-primary{background:linear-gradient(135deg,var(--rose),var(--rose2));color:#fff;box-shadow:0 8px 20px rgba(192,88,106,.32)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 12px 26px rgba(192,88,106,.42)}
+.btn-whats{background:linear-gradient(135deg,#25d366,#1da851);color:#fff;box-shadow:0 8px 20px rgba(37,211,102,.3)}
+.btn-whats:hover{transform:translateY(-1px);box-shadow:0 12px 26px rgba(37,211,102,.42)}
+.btn-ghost{background:#fff;color:var(--gray7);border:1.5px solid var(--gray3)}
+.btn-ghost:hover{background:var(--gray1);border-color:var(--gray4)}
+
+/* TIMELINE CARD */
+.tl-card{background:#fff;border-radius:var(--radius-xl);box-shadow:var(--shadow);padding:1.5rem;animation:fadeUp .5s .55s both}
+.tl-title{font-size:16px;font-weight:800;color:var(--gray8);margin-bottom:1.25rem;display:flex;align-items:center;gap:8px;letter-spacing:-.2px}
+.tl{position:relative;padding-left:32px}
+.tl::before{content:"";position:absolute;left:11px;top:6px;bottom:6px;width:2px;background:var(--gray3)}
+.tl-step{position:relative;margin-bottom:18px}
+.tl-step:last-child{margin-bottom:0}
+.tl-dot{position:absolute;left:-32px;top:1px;width:24px;height:24px;border-radius:50%;background:#fff;border:2.5px solid var(--gray3);display:flex;align-items:center;justify-content:center;color:var(--gray4);font-size:11px;font-weight:800}
+.tl-step.done .tl-dot{background:var(--green);border-color:var(--green);color:#fff;box-shadow:0 4px 10px rgba(34,197,94,.3)}
+.tl-step.active .tl-dot{background:#fff;border-color:var(--rose);color:var(--rose);box-shadow:0 0 0 4px rgba(192,88,106,.18)}
+.tl-step.active .tl-dot::after{content:"";position:absolute;inset:-3px;border-radius:50%;border:2px solid var(--rose);animation:ringPulse 1.6s infinite}
+.tl-step-title{font-size:14px;font-weight:700;color:var(--gray8);margin-bottom:3px;line-height:1.3}
+.tl-step.done .tl-step-title{color:var(--green-text)}
+.tl-step-sub{font-size:12.5px;color:var(--gray5);line-height:1.5}
+.tl-step-sub strong{color:var(--gray7);font-weight:600}
+
+/* INFO ROW */
+.info-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;animation:fadeUp .5s .65s both}
+@media(max-width:560px){.info-row{grid-template-columns:1fr}}
+.info-card{background:#fff;border-radius:var(--radius-xl);box-shadow:var(--shadow);padding:1.25rem;display:flex;align-items:flex-start;gap:12px}
+.info-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.info-icon.email{background:linear-gradient(135deg,#dbeafe,#fff);color:#1d4ed8;border:1px solid #bfdbfe}
+.info-icon.support{background:linear-gradient(135deg,#dcfce7,#fff);color:var(--green-text);border:1px solid #bbf7d0}
+.info-body{flex:1;min-width:0}
+.info-title{font-size:13.5px;font-weight:700;color:var(--gray8);margin-bottom:3px}
+.info-desc{font-size:12px;color:var(--gray6);line-height:1.5}
+.info-desc a{color:var(--rose2);font-weight:600}
+.info-desc a:hover{text-decoration:underline}
+
+/* SHARE CARD */
+.share-card{background:linear-gradient(135deg,#fff7f8 0%,#fff 100%);border:1.5px solid var(--rose-border);border-radius:var(--radius-xl);padding:1.25rem;display:flex;align-items:center;gap:14px;flex-wrap:wrap;animation:fadeUp .5s .75s both}
+.share-text{flex:1;min-width:200px}
+.share-title{font-size:14px;font-weight:800;color:var(--gray8);margin-bottom:3px}
+.share-sub{font-size:12.5px;color:var(--gray6)}
+.share-btns{display:flex;gap:7px;flex-shrink:0}
+.share-btn{width:38px;height:38px;border-radius:10px;border:1.5px solid var(--gray3);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s}
+.share-btn:hover{border-color:var(--rose);transform:translateY(-2px) scale(1.05)}
+
+/* SUGGESTIONS */
+.sugg-card{background:#fff;border-radius:var(--radius-xl);box-shadow:var(--shadow);padding:1.5rem;animation:fadeUp .5s .85s both}
+.sugg-title{font-size:16px;font-weight:800;color:var(--gray8);margin-bottom:1rem;letter-spacing:-.2px}
+.sugg-row{display:flex;gap:12px;overflow-x:auto;scrollbar-width:thin;padding-bottom:6px}
+.sugg-row::-webkit-scrollbar{height:6px}
+.sugg-row::-webkit-scrollbar-thumb{background:var(--gray3);border-radius:4px}
+.sugg-item{flex:0 0 150px;background:var(--gray1);border:1px solid var(--gray3);border-radius:var(--radius-lg);padding:11px;cursor:pointer;transition:all .2s;text-align:center}
+.sugg-item:hover{background:#fff;border-color:var(--rose-border);transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+.sugg-img{width:100%;aspect-ratio:1;background:#fff;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:42px;margin-bottom:8px;border:1px solid var(--gray3)}
+.sugg-name{font-size:11.5px;font-weight:600;color:var(--gray7);line-height:1.35;margin-bottom:5px;min-height:32px}
+.sugg-price{font-size:13px;font-weight:800;color:var(--rose2)}
+
+footer{background:var(--gray8);color:#a5b4cf;text-align:center;padding:2rem 1.5rem;font-size:12px;line-height:1.8}
+footer a{color:#d6def0}
+
+@media(max-width:560px){
+  .hero{padding:2rem 1.4rem 1.6rem}
+  .hero-title{font-size:23px}
+  .hero-sub{font-size:14px}
+  .order-card-id{font-size:20px}
+}
+</style>
 </head>
 <body>
 
+<div class="toast" id="toast">
+  <div class="toast-dot"></div>
+  <span id="toast-msg"></span>
+</div>
+
+<div class="topbar">
+  <span class="topbar-item">🚚 Frete grátis para todo o Brasil</span>
+  <span class="topbar-sep">|</span>
+  <span class="topbar-item">🔒 <strong>Pagamento 100% seguro</strong></span>
+  <span class="topbar-sep">|</span>
+  <span class="topbar-item">📄 Nota fiscal incluída</span>
+</div>
+
 <nav class="nav">
-  <div class="nav-logo">
-    <div class="nav-logo-icon">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1a2744" stroke-width="2.5">
+  <a class="nav-logo" href="/">
+    <div class="nav-logo-box">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5">
         <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
         <line x1="3" y1="6" x2="21" y2="6"/>
         <path d="M16 10a4 4 0 01-8 0"/>
       </svg>
     </div>
-    Mercado Liquida
+    Mercado de Ofertas
+  </a>
+  <div class="nav-secure">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    Pedido confirmado
   </div>
 </nav>
 
-<div class="center">
-  <div class="card">
-    <div class="check">
-      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5">
-        <path d="M20 6L9 17l-5-5"/>
-      </svg>
-    </div>
-    <h1>Pedido realizado! 🎉</h1>
-    <p class="sub">Obrigado pela sua compra! Você será redirecionado para o pagamento. Após a confirmação, seu produto será enviado em até 5 dias úteis.</p>
+<div class="confetti-wrap" id="confetti" aria-hidden="true"></div>
 
-    {% if pedido_id %}
-    <div class="pedido-id">
-      Número do pedido
-      <strong>#{{ pedido_id }}</strong>
-    </div>
-    {% endif %}
+<div class="main">
+  <div class="shell">
 
-    <div class="steps">
-      <div class="step">
-        <div class="step-num">1</div>
-        <span><strong>Pagamento confirmado</strong> — você receberá um e-mail de confirmação.</span>
+    <div class="hero">
+      <div class="check-wrap">
+        <div class="check-ring"></div>
+        <div class="check-ring"></div>
+        <div class="check-circle">
+          <svg class="check-svg" viewBox="0 0 52 52">
+            <circle cx="26" cy="26" r="23"/>
+            <path d="M14 27 L23 36 L39 18"/>
+          </svg>
+        </div>
       </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <span><strong>Separação</strong> — seu pedido será preparado e embalado com cuidado.</span>
+
+      <h1 class="hero-title">Pedido realizado! <span class="wave-emoji">🎉</span></h1>
+      <p class="hero-sub">
+        Recebemos sua compra com sucesso. Você será redirecionado para o pagamento — após a confirmação,
+        seu produto será preparado e enviado em <strong>até 5 dias úteis</strong> com frete grátis.
+      </p>
+
+      {% if pedido_id %}
+      <div class="order-card">
+        <div class="order-card-label">Número do pedido</div>
+        <div class="order-card-id" id="orderId">#{{ pedido_id }}</div>
+        <button class="copy-btn" id="copyBtn" onclick="copyOrderId()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          <span id="copyBtnTxt">Copiar número do pedido</span>
+        </button>
       </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <span><strong>Entrega</strong> — estimativa de 3 a 5 dias úteis após o pagamento.</span>
+      {% endif %}
+
+      <div class="cta-row">
+        <button class="btn btn-whats" onclick="openWhats()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Acompanhar no WhatsApp
+        </button>
+        <a class="btn btn-ghost" href="/">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Voltar à loja
+        </a>
       </div>
     </div>
 
-    <a href="/" class="btn-home">Continuar comprando</a>
+    <div class="tl-card">
+      <h2 class="tl-title">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--gray7)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        Acompanhe seu pedido
+      </h2>
+      <div class="tl">
+        <div class="tl-step done">
+          <div class="tl-dot">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+          </div>
+          <div class="tl-step-title">Pedido recebido</div>
+          <div class="tl-step-sub">Sua solicitação foi registrada com sucesso. Enviamos uma cópia para o seu e-mail.</div>
+        </div>
+        <div class="tl-step active">
+          <div class="tl-dot">2</div>
+          <div class="tl-step-title">Aguardando pagamento</div>
+          <div class="tl-step-sub">Você será redirecionado para o ambiente seguro. <strong>Pagando no Pix, a aprovação é imediata.</strong></div>
+        </div>
+        <div class="tl-step">
+          <div class="tl-dot">3</div>
+          <div class="tl-step-title">Separação e embalagem</div>
+          <div class="tl-step-sub">Após confirmado, em até 1 dia útil seu pedido é separado e embalado com cuidado.</div>
+        </div>
+        <div class="tl-step">
+          <div class="tl-dot">4</div>
+          <div class="tl-step-title">A caminho</div>
+          <div class="tl-step-sub">Você recebe o código de rastreio para acompanhar a entrega em tempo real.</div>
+        </div>
+        <div class="tl-step">
+          <div class="tl-dot">5</div>
+          <div class="tl-step-title">Entregue</div>
+          <div class="tl-step-sub">Estimativa de <strong>3 a 5 dias úteis</strong> após a confirmação do pagamento.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-row">
+      <div class="info-card">
+        <div class="info-icon email">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <div class="info-body">
+          <div class="info-title">Confirmação por e-mail</div>
+          <div class="info-desc">Em alguns minutos você recebe a confirmação completa com nota fiscal e link de acompanhamento.</div>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon support">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        </div>
+        <div class="info-body">
+          <div class="info-title">Precisa de ajuda?</div>
+          <div class="info-desc">Nossa equipe atende 7 dias por semana. <a href="#" onclick="openWhats();return false">Fale conosco no WhatsApp</a></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="share-card">
+      <div class="share-text">
+        <div class="share-title">Compartilhe a oferta com a galera 💌</div>
+        <div class="share-sub">Quem indica também ganha. Mostre essa promoção pros seus amigos.</div>
+      </div>
+      <div class="share-btns">
+        <button class="share-btn" onclick="shareWhats()" title="WhatsApp">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </button>
+        <button class="share-btn" onclick="shareFB()" title="Facebook">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#1877f2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </button>
+        <button class="share-btn" onclick="copyShareLink()" title="Copiar link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gray7)" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="sugg-card">
+      <h2 class="sugg-title">Você também pode gostar</h2>
+      <div class="sugg-row">
+        <div class="sugg-item" onclick="window.location.href='/'">
+          <div class="sugg-img">🍴</div>
+          <div class="sugg-name">Talheres 24 peças aço inox</div>
+          <div class="sugg-price">R$ 39,90</div>
+        </div>
+        <div class="sugg-item" onclick="window.location.href='/'">
+          <div class="sugg-img">🥄</div>
+          <div class="sugg-name">Utensílios silicone 6 peças</div>
+          <div class="sugg-price">R$ 29,90</div>
+        </div>
+        <div class="sugg-item" onclick="window.location.href='/'">
+          <div class="sugg-img">🥧</div>
+          <div class="sugg-name">Forma de bolo antiaderente</div>
+          <div class="sugg-price">R$ 24,90</div>
+        </div>
+        <div class="sugg-item" onclick="window.location.href='/'">
+          <div class="sugg-img">🥖</div>
+          <div class="sugg-name">Tábua de corte premium</div>
+          <div class="sugg-price">R$ 19,90</div>
+        </div>
+        <div class="sugg-item" onclick="window.location.href='/'">
+          <div class="sugg-img">☕</div>
+          <div class="sugg-name">Jogo de canecas 6 peças</div>
+          <div class="sugg-price">R$ 32,90</div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
+<footer>
+  <p style="font-size:14px;font-weight:600;color:#e5e7eb;margin-bottom:6px">Mercado de Ofertas</p>
+  <p>© 2026 mercadosdeofertas.shop – Todos os direitos reservados</p>
+  <p style="margin-top:4px">Atendimento online • Compra segura • Frete grátis para todo o Brasil</p>
+</footer>
+
+<script>
+let toastTimer;
+function showToast(msg) {
+  document.getElementById('toast-msg').textContent = msg;
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+/* ── CONFETTI ───────────────────────────────────────── */
+(function(){
+  const wrap = document.getElementById('confetti');
+  const colors = ['#c0586a','#8b1a3a','#16a34a','#f59e0b','#2563eb','#7c3aed','#fef08a'];
+  const N = 80;
+  for(let i=0;i<N;i++){
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.left = Math.random()*100 + '%';
+    c.style.background = colors[Math.floor(Math.random()*colors.length)];
+    c.style.animationDuration = (2.4 + Math.random()*2.6) + 's';
+    c.style.animationDelay = Math.random()*1.2 + 's';
+    c.style.width = (5 + Math.random()*6) + 'px';
+    c.style.height = (10 + Math.random()*8) + 'px';
+    if(Math.random() < .35) c.style.borderRadius = '50%';
+    wrap.appendChild(c);
+  }
+  setTimeout(()=>wrap.remove(), 6500);
+})();
+
+/* ── COPY ORDER ID ──────────────────────────────────── */
+function copyOrderId(){
+  const id = document.getElementById('orderId').textContent.trim();
+  const btn = document.getElementById('copyBtn');
+  const txt = document.getElementById('copyBtnTxt');
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(id).then(() => {
+      btn.classList.add('copied');
+      txt.textContent = '✓ Número copiado';
+      showToast('Número do pedido copiado.');
+      setTimeout(()=>{btn.classList.remove('copied');txt.textContent='Copiar número do pedido'}, 2500);
+    });
+  } else {
+    showToast('Selecione e copie o número manualmente.');
+  }
+}
+
+/* ── SHARE ──────────────────────────────────────────── */
+function shareWhats(){
+  const url = encodeURIComponent(window.location.origin + '/');
+  const text = encodeURIComponent('Achei essa oferta de panelas com frete grátis: ');
+  window.open('https://wa.me/?text=' + text + url, '_blank');
+}
+function shareFB(){
+  const url = encodeURIComponent(window.location.origin + '/');
+  window.open('https://www.facebook.com/sharer/sharer.php?u=' + url, '_blank');
+}
+function copyShareLink(){
+  const url = window.location.origin + '/';
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(url).then(() => showToast('Link da loja copiado.'));
+  }
+}
+function openWhats(){
+  const orderEl = document.getElementById('orderId');
+  const ref = orderEl ? orderEl.textContent.trim() : '';
+  const text = encodeURIComponent('Olá! Acabei de fazer o pedido ' + ref + ' e gostaria de acompanhar.');
+  window.open('https://wa.me/?text=' + text, '_blank');
+}
+</script>
+<script src="/static/visitor-tracker.js"></script>
 </body>
 </html>
