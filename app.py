@@ -14,7 +14,7 @@ app.secret_key = os.environ.get("SECRET_KEY", "troque-esta-chave-em-producao")
 # Troque pela URL do seu produto de produção quando sair do modo teste
 INVICTUS_CHECKOUT_URL = os.environ.get(
     "INVICTUS_CHECKOUT_URL",
-    "https://go.invictuspay.app.br/m387smwrlf_mpzmtfsx5d"   # link de teste atual
+    "https://go.invictuspay.app.br/b1hguv9dl4"
 )
 
 # Google OAuth — configure no Google Cloud Console
